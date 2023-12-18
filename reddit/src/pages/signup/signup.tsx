@@ -53,8 +53,6 @@ function SignUp() {
                         <span>Already a redditor  </span>
                         <Link href="#" underline="none">Log In</Link>
                     </div>
-
-                    {/* <Button type='submit' variant='contained'>Continue</Button> */}
                     <Button type="submit" variant='contained'>Continue</Button>
 
                 </div>
