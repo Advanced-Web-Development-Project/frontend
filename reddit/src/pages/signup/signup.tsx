@@ -3,18 +3,29 @@ import styles from "./index.module.css"
 import { initialUser, userOutput } from './service';
 import { useFormik } from 'formik'
 import { userSchema } from '../../validation';
+import { signupAPI } from '../../api';
+import { DynamicUser, User } from '../../models/general';
 
 function SignUp() {
+    console.log("check")
+
 
     const { values, handleBlur, handleChange, handleSubmit, errors, touched } = useFormik({
         initialValues: initialUser,
         validationSchema: userSchema,
-        onSubmit: (values) => {
-            // Your form submission logic here
-            console.log("@@@@@@@@@@@@");
+        onSubmit: async (user: User) => {
+
+            console.log(values)
+            const response = await signupAPI(user)
+            console.log(response);
         },
 
+
     });
+
+
+    console.log(errors)
+
     return (
         <>
             <form className={styles.page} onSubmit={handleSubmit}>

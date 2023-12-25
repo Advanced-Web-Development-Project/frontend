@@ -2,8 +2,7 @@ import * as yup from 'yup';
 
 export const userSchema = yup.object().shape({
     userName: yup.string().required('Username is required'),
-    fullName: yup.string().required('Full name is required'),
-    city: yup.string().required('City is required'),
+    email: yup.string().required('Email is required'),
     password: yup
         .string()
         .required('Password is required')

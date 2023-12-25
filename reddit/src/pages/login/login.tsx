@@ -1,9 +1,26 @@
-import React from 'react';
-import { Button, TextField, Link, IconButton } from '@mui/material'
+import React, { useState } from 'react';
+import { Button, Link, IconButton } from '@mui/material'
 import styles from "./index.module.css"
-import UserTextField from '../../gen_components/UserTextField';
+import { loginAPI } from '../../api';
+
 
 function Login() {
+
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const handleLogin = async () => {
+        try {
+            const response = await loginAPI(email, password);
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
+
+
+    }
+
     return (
         <>
             <div className={styles.page}>
@@ -24,8 +41,21 @@ function Login() {
                     </div>
 
                     <div className={styles.button_container}>
-                        {/* <UserTextField placeHolder='Username'></UserTextField>
-                        <UserTextField placeHolder='Password'></UserTextField> */}
+                        <input
+                            type='text'
+                            id='email'
+                            className={styles.input}
+                            placeholder={'Email..'}
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email} />
+                        <input
+                            type='password'
+                            id='password'
+                            className={styles.input}
+                            placeholder={'Password..'}
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password} />
+
                     </div>
 
                     <div>
@@ -33,7 +63,7 @@ function Login() {
                         <Link href="#" underline="none">Sign Up</Link>
                     </div>
 
-                    <Button variant='contained' color='info'>Log In</Button>
+                    <Button variant='contained' onClick={handleLogin} color='info'>Log In</Button>
                 </div>
             </div>
         </>
