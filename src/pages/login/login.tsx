@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Button, Link, IconButton } from '@mui/material'
 import styles from "./index.module.css"
 import { loginAPI } from '../../api';
+import { useAuth } from '../../gen_components/AuthContexts';
 
 
 function Login() {
+
+    const { login } = useAuth();
 
 
     const [email, setEmail] = useState('')
@@ -13,12 +16,9 @@ function Login() {
     const handleLogin = async () => {
         try {
             const response = await loginAPI(email, password);
-            console.log(response);
         } catch (error) {
             console.log(error);
         }
-
-
     }
 
     return (

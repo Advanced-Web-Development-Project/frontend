@@ -8,11 +8,14 @@ import Signup from './pages/signup/signup';
 function App() {
   return (
 
-    <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/signup' element={<Signup />} />
-    </Routes>
+    <>
+      <h1>ofek</h1>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
+      </Routes>
+    </>
 
   );
 }
