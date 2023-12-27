@@ -5,6 +5,17 @@
   background-color: white;
   padding: 0 20px;
   position: relative;
+  height: 50px;
+}
+
+.navbar__left {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.link__home {
+  height: 100%;
 }
 
 .searchBar {
@@ -16,6 +27,7 @@
   border-radius: 15px;
   padding: 5px 10px;
   max-width: 500px;
+  height: 100%;
 }
 
 .searchInput {
@@ -43,7 +55,8 @@
   border: 1px solid #ccc;
   padding: 10px;
   display: none;
-  flex-direction: column; /* New line to make items stack vertically */
+  flex-direction: column;
+  /* New line to make items stack vertically */
 }
 
 @media screen and (max-width: 768px) {
@@ -52,11 +65,12 @@
   }
 
   .navItems {
-    display: none; /* Hide the original login/signup buttons on small screens */
+    display: none;
+    /* Hide the original login/signup buttons on small screens */
   }
 
   .dropdownMenu {
-    display: flex; 
+    display: flex;
   }
 
   .searchBar {

@@ -18,6 +18,8 @@ function Login() {
         try {
             const response = await loginAPI(email, password);
 
+            console.log(" - 1 -RESPONSE", response.data)
+
             const accessToken = response.data.token
             const user = response.data.userInfo
 
@@ -25,7 +27,7 @@ function Login() {
             navigate('/');
 
         } catch (error: any) {
-            console.log(error);
+
             alert(error.message)
         }
     }

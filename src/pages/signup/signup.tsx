@@ -5,9 +5,12 @@ import { useFormik } from 'formik'
 import { userSchema } from '../../validation';
 import { signupAPI } from '../../api';
 import { DynamicUser, User } from '../../models/general';
+import { login } from '../navbar/service';
+import { useNavigate } from 'react-router';
 
 function SignUp() {
-    console.log("check")
+
+    const navigate = useNavigate();
 
 
     const { values, handleBlur, handleChange, handleSubmit, errors, touched } = useFormik({
@@ -15,16 +18,22 @@ function SignUp() {
         validationSchema: userSchema,
         onSubmit: async (user: User) => {
 
-            console.log(values)
-            const response = await signupAPI(user)
-            console.log(response);
+            try {
+
+                const response: any = await signupAPI(user)
+                const accessToken = response.data.token
+                const userInfo = response.data.userInfo
+
+                login(accessToken, userInfo)
+                navigate('/');
+
+            } catch (error: any) {
+                alert(error.message)
+            }
         },
 
 
     });
-
-
-    console.log(errors)
 
     return (
         <>
@@ -43,7 +52,6 @@ function SignUp() {
                         {userOutput.map(({ key, type, desc }) => {
                             return (
                                 <>
-                                    {/* <span>{desc}</span> */}
                                     <input
                                         type={type}
                                         id={key}

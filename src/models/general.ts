@@ -1,12 +1,14 @@
 export type User = {
-    userName: string,
+    username: string,
+    name: string,
     email: string,
-    password: string
+    password: string,
     matchedPassword: string
 }
 
 export type DynamicUser = {
-    userName: string;
+    username: string;
+    name: string;
     email: string;
     password: string;
     matchedPassword: string;
