@@ -1,0 +1,65 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 0 20px;
+  position: relative;
+}
+
+.searchBar {
+  flex-grow: 1;
+  margin: 0 20px;
+  display: flex;
+  align-items: center;
+  background-color: #F6F7F8;
+  border-radius: 15px;
+  padding: 5px 10px;
+  max-width: 500px;
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  background: transparent;
+  margin-left: 10px;
+  width: 100%;
+}
+
+.navItems {
+  display: flex;
+  gap: 10px;
+}
+
+.menu {
+  display: none;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: none;
+  flex-direction: column; /* New line to make items stack vertically */
+}
+
+@media screen and (max-width: 768px) {
+  .menu {
+    display: block;
+  }
+
+  .navItems {
+    display: none; /* Hide the original login/signup buttons on small screens */
+  }
+
+  .dropdownMenu {
+    display: flex; 
+  }
+
+  .searchBar {
+    display: flex;
+  }
+}
