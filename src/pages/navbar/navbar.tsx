@@ -45,16 +45,18 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className={styles.navbar}>
-      <Link to="/">Home</Link>
-      <div className={styles.searchBar}>
-        <FontAwesomeIcon icon={faMagnifyingGlass} />
-        <input
-          className={styles.searchInput}
-          type="text"
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+      <div className={styles.navbar__left}>
+        <Link to="/" className={styles.link__home}>Home</Link>
+        <div className={styles.searchBar}>
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+          <input
+            className={styles.searchInput}
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
       <div className={styles.navItems}>
         {renderMenuLinks()}

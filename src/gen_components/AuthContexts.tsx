@@ -1,16 +1,19 @@
 
 // AuthContext.js
 import { createContext, useContext, useState } from 'react';
+import { User } from '../models/general';
 
 type AuthContextType = {
   accessToken: string | null,
-  login: (token: string) => void,
+  user: User | null,
+  login: (token: string, user: User) => void,
   logout: () => void
 }
 
 const initialAuthContext: AuthContextType = {
   accessToken: null,
-  login: (token: string) => { },
+  user: null,
+  login: (token: string, user: User) => { },
   logout: () => { }
 }
 const AuthContext = createContext(initialAuthContext);
@@ -18,17 +21,20 @@ const AuthContext = createContext(initialAuthContext);
 export const AuthProvider = ({ children }: any) => {
 
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
-  const login = (token: string) => {
+  const login = (token: string, user: User) => {
     setAccessToken(token);
+    setUser(user)
   };
 
   const logout = () => {
     setAccessToken(null);
+    setUser(null)
   };
 
   return (
-    <AuthContext.Provider value={{ accessToken, login, logout }}>
+    <AuthContext.Provider value={{ accessToken, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
