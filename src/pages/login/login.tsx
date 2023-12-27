@@ -3,12 +3,13 @@ import { Button, Link, IconButton } from '@mui/material'
 import styles from "./index.module.css"
 import { loginAPI } from '../../api';
 import { useAuth } from '../../gen_components/AuthContexts';
+import { useNavigate } from 'react-router-dom';
 
 
 function Login() {
 
     const { login } = useAuth();
-
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -16,8 +17,16 @@ function Login() {
     const handleLogin = async () => {
         try {
             const response = await loginAPI(email, password);
-        } catch (error) {
+
+            const accessToken = response.data.token
+            const user = response.data.userInfo
+
+            login(accessToken, user)
+            navigate('/');
+
+        } catch (error: any) {
             console.log(error);
+            alert(error.message)
         }
     }
 
