@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import { Button, Link, IconButton } from '@mui/material'
 import styles from "./index.module.css"
 import { loginAPI } from '../../api';
-import { useAuth } from '../../gen_components/AuthContexts';
+import { useAuth } from '../../contexts/AuthContexts';
 import { useNavigate } from 'react-router-dom';
+import { useDialogContext } from '../../contexts/PageContext';
+import { DialogPage } from '../../models/general';
+import { useErrorContext } from '../../contexts/ErrorContext';
+
+interface LoginProps {
+}
 
 
-function Login() {
+function Login({ }: LoginProps) {
 
     const { login } = useAuth();
     const navigate = useNavigate();
@@ -14,29 +20,35 @@ function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    const { setPage } = useDialogContext()
+    const { setError } = useErrorContext()
+
+
+
     const handleLogin = async () => {
         try {
             const response = await loginAPI(email, password);
-
-            console.log(" - 1 -RESPONSE", response.data)
-
             const accessToken = response.data.token
             const user = response.data.userInfo
 
             login(accessToken, user)
-            navigate('/');
+            setPage(DialogPage.None)
 
         } catch (error: any) {
 
-            alert(error.message)
+            const errors: string[] = error.response.data.errors
+            const message = errors.reduce((acc, curr) => acc + curr)
+            setError({ display: true, message: message, seveirity: 'error' })
         }
     }
+
+
 
     return (
         <>
             <div className={styles.page}>
                 <div className={styles.page__container}>
-                    <IconButton className={styles.closeIcon}>X</IconButton>
+                    <IconButton className={styles.closeIcon} onClick={() => setPage(DialogPage.None)}>X</IconButton>
 
                     <div className={styles.title}>Log In</div>
 

@@ -1,18 +1,16 @@
-import React, { ChangeEvent } from 'react';
+import { Alert } from '@mui/material';
+import React from 'react';
 
 
 interface ErrorBoxProps {
-
+    status: string
 }
 
 
 
 const ErrorBox: React.FC<ErrorBoxProps> = ({ }) => {
     return (
-
-        <div></div>
-
-
+        <Alert severity="error">This is an error alert — check it out!</Alert>
     );
 }
 

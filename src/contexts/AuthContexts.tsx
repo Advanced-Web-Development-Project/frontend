@@ -6,6 +6,7 @@ import { User } from '../models/general';
 type AuthContextType = {
   accessToken: string | null,
   user: User | null,
+  isLoggedIn: boolean,
   login: (token: string, user: User) => void,
   logout: () => void
 }
@@ -13,9 +14,11 @@ type AuthContextType = {
 const initialAuthContext: AuthContextType = {
   accessToken: null,
   user: null,
+  isLoggedIn: false,
   login: (token: string, user: User) => { },
   logout: () => { }
 }
+
 const AuthContext = createContext(initialAuthContext);
 
 export const AuthProvider = ({ children }: any) => {
@@ -28,13 +31,15 @@ export const AuthProvider = ({ children }: any) => {
     setUser(user)
   };
 
+  const isLoggedIn = user !== null
+
   const logout = () => {
     setAccessToken(null);
     setUser(null)
   };
 
   return (
-    <AuthContext.Provider value={{ accessToken, user, login, logout }}>
+    <AuthContext.Provider value={{ accessToken, user, login, logout, isLoggedIn }}>
       {children}
     </AuthContext.Provider>
   );

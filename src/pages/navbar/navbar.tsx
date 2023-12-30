@@ -1,53 +1,48 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './index.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faBars } from '@fortawesome/free-solid-svg-icons';
+import reddit_logo from "../../pictures/reddit_logo.png"
+import { Home, Person } from '@mui/icons-material/';
+import { Button, IconButton } from '@mui/material';
+import { useAuth } from '../../contexts/AuthContexts';
+import { useDialogContext } from '../../contexts/PageContext';
+import { DialogPage } from '../../models/general';
 
 const Navbar: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const { setPage } = useDialogContext()
+
   const [searchTerm, setSearchTerm] = useState('');
-  const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { isLoggedIn, logout } = useAuth()
 
-  const toggleDropdown = () => setShowDropdown(!showDropdown);
+  const handleLogin = () => {
+    setPage(DialogPage.Login)
+  }
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setShowDropdown(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const handleMenuClick = () => {
-    setShowDropdown(false);
-  };
-
-  const renderMenuLinks = () => (
-    isLoggedIn ? (
-      <>
-        <Link to="/profile" onClick={handleMenuClick}>Profile</Link>
-        <button onClick={() => { setIsLoggedIn(false); handleMenuClick(); }}>Logout</button>
-      </>
-    ) : (
-      <>
-        <Link to="/login" onClick={handleMenuClick}>Log In</Link>
-        <Link to="/signup" onClick={handleMenuClick}>Sign Up</Link>
-      </>
-    )
-  );
+  const handleSignup = () => {
+    setPage(DialogPage.Signup)
+  }
 
   return (
+
     <nav className={styles.navbar}>
+
       <div className={styles.navbar__left}>
-        <Link to="/" className={styles.link__home}>Home</Link>
-        <div className={styles.searchBar}>
+
+        <img
+          src={reddit_logo}
+          alt="Circular Avatar"
+          className={styles.navbar_reddit_logo}
+        />
+
+
+        <IconButton className={styles.navbar_home_icon}>
+          <Home fontSize='large' />
+        </IconButton>
+
+        <div className={styles.navbar__searchBar}>
           <FontAwesomeIcon icon={faMagnifyingGlass} />
           <input
             className={styles.searchInput}
@@ -57,16 +52,28 @@ const Navbar: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+
       </div>
-      <div className={styles.navItems}>
-        {renderMenuLinks()}
+
+      <div className={styles.navbar__right}>
+
+        {isLoggedIn ? (
+          <>
+            <IconButton className={styles.navbar_home_icon}>
+              <Person fontSize='large' />
+            </IconButton>
+            <Button onClick={logout}  >Logout</Button>
+          </>
+        ) : (
+          <>
+            <Button onClick={handleLogin}><span>Login</span></Button>
+            <Button onClick={handleSignup}>Signup</Button>
+          </>
+        )}
+
       </div>
-      <FontAwesomeIcon className={styles.menu} icon={faBars} onClick={toggleDropdown} />
-      {showDropdown && (
-        <div className={styles.dropdownMenu} ref={dropdownRef}>
-          {renderMenuLinks()}
-        </div>
-      )}
+
+
     </nav>
   );
 };
