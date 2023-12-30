@@ -3,7 +3,10 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom"
-import { AuthProvider } from './gen_components/AuthContexts';
+import { AuthProvider } from './contexts/AuthContexts';
+import { DialogProvider } from './contexts/PageContext';
+import { ErrorProvider } from './contexts/ErrorContext';
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,7 +15,11 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <DialogProvider>
+          <ErrorProvider>
+            <App />
+          </ErrorProvider>
+        </DialogProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

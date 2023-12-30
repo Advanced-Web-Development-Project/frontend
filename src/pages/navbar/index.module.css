@@ -4,14 +4,45 @@
   align-items: center;
   background-color: white;
   padding: 0 20px;
-  position: relative;
-  height: 50px;
+  position: sticky;
+  height: 70px;
 }
 
 .navbar__left {
   display: flex;
   align-items: center;
   height: 100%;
+}
+
+
+.navbar__right {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar_home_icon {
+  color: black !important;
+  margin-left: 35px !important;
+}
+
+
+.navbar__searchBar {
+  border: none;
+  outline: none;
+  background: rgb(238, 236, 236);
+  height: 30px;
+  border-radius: 20px;
+  padding: 10px;
+  align-items: center;
+  font-size: 20px;
+  display: flex;
+  margin-left: 50px;
+}
+
+.navbar_reddit_logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 15px;
 }
 
 .link__home {
@@ -46,6 +77,7 @@
 .menu {
   display: none;
 }
+
 
 .dropdownMenu {
   position: absolute;

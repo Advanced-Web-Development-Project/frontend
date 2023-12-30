@@ -4,14 +4,18 @@ import { initialUser, userOutput } from './service';
 import { useFormik } from 'formik'
 import { userSchema } from '../../validation';
 import { signupAPI } from '../../api';
-import { DynamicUser, User } from '../../models/general';
+import { DialogPage, DynamicUser, User } from '../../models/general';
 import { login } from '../navbar/service';
 import { useNavigate } from 'react-router';
+import { useDialogContext } from '../../contexts/PageContext';
+import { useErrorContext } from '../../contexts/ErrorContext';
 
 function SignUp() {
 
     const navigate = useNavigate();
 
+    const { setPage } = useDialogContext()
+    const { setError } = useErrorContext()
 
     const { values, handleBlur, handleChange, handleSubmit, errors, touched } = useFormik({
         initialValues: initialUser,
@@ -25,10 +29,13 @@ function SignUp() {
                 const userInfo = response.data.userInfo
 
                 login(accessToken, userInfo)
-                navigate('/');
+                setPage(DialogPage.None)
+
 
             } catch (error: any) {
-                alert(error.message)
+
+                alert()
+                setError({ display: true, message: "Email is not valid", seveirity: 'error' })
             }
         },
 
@@ -39,7 +46,7 @@ function SignUp() {
         <>
             <form className={styles.page} onSubmit={handleSubmit}>
 
-                <IconButton className={styles.closeIcon}>X</IconButton>
+                <IconButton className={styles.closeIcon} onClick={() => setPage(DialogPage.None)}>X</IconButton>
 
                 <div className={styles.page__container}>
 
@@ -79,5 +86,7 @@ function SignUp() {
         </>
     );
 }
+
+
 
 export default SignUp;
