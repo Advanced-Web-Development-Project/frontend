@@ -55,7 +55,8 @@ export type Post = {
 export enum DialogPage {
     None = "NONE",
     Login = "LOGIN",
-    Signup = "SIGNUP"
+    Signup = "SIGNUP",
+    ShowPost = "SHOW_POST"
 }
 
 // export type DynamicUser = User | { [key: string]: string }

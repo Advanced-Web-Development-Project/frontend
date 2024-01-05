@@ -13,4 +13,15 @@
     padding: 10px;
 }
 
-.card__info {}
+.card__info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.clickable{
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+}

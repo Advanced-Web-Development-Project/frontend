@@ -10,18 +10,31 @@ import styles from './index.module.css'
 import { getAllPostsAPI } from '../../api/post_api';
 import PostBox from '../../features/post/post_box/post_box';
 import PostList from '../../features/post/post_list/post_list';
+import PostPage from './../post/post_page'
 
 function Home() {
 
     const { page } = useDialogContext()
     const { error } = useErrorContext()
 
-
+    const currentPage = () => {
+        switch (page) {
+            case DialogPage.Login:
+                return <LoginPage />
+            case DialogPage.Signup:
+                return <SignupPage />
+            case DialogPage.ShowPost:
+                return <PostPage />
+            case DialogPage.None:
+                return <></>
+        }
+    }
 
     return (
         <>
             <DialogConatiner>
-                {page === DialogPage.None ? <></> : page === DialogPage.Login ? <LoginPage /> : <SignupPage />}
+
+                {currentPage()}
                 {error !== null &&
                     <div className={styles.alert_container}>
                         <Alert className={styles.alert} severity={error.seveirity}><span>{error.message}</span></Alert>
