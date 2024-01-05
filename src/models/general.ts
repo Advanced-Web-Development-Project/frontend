@@ -1,4 +1,5 @@
 export type User = {
+    id: string
     username: string,
     name: string,
     email: string,
@@ -6,17 +7,13 @@ export type User = {
     matchedPassword: string
 }
 
-export type DynamicUser = {
-    username: string;
-    name: string;
-    email: string;
-    password: string;
-    matchedPassword: string;
+export type DynamicUser = User & {
     [key: string]: any;
 };
 
 export type Post = {
-    user: string,
+    _id: string,
+    user: User,
     title: string,
     imagePath: string,
     likes: string[],
@@ -26,36 +23,19 @@ export type Post = {
     updatedAt: Date
 }
 
-// user: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'user',
-//     required: true
-// },
-// title: {
-//     type: String,
-//     required: true,
-// },
-// imagePath: {
-//     type: String,
-//     required: true,
-// },
-// likes: {
-//     type: [String],
-//     default: [],
-// },
-// dislikes: {
-//     type: [String],
-//     default: [],
-// },
-// content: {
-//     type: String,
-//     required: true
-// },
+export type UserStorageInfo = {
+    accessToken: string,
+    user: User // json stringed
+}
+
+// export type User
 
 export enum DialogPage {
     None = "NONE",
     Login = "LOGIN",
-    Signup = "SIGNUP"
+    Signup = "SIGNUP",
+    AddPost = "ADDPOST",
+    Profile = "PROFILE"
 }
 
 // export type DynamicUser = User | { [key: string]: string }

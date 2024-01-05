@@ -1,0 +1,21 @@
+.page {
+    position: relative;
+    padding: 40px 70px 40px 70px;
+    width: 100%;
+}
+
+.text_box {
+    width: 400px;
+}
+
+.content {
+    margin-top: 20px;
+}
+
+.button_row {
+    display: flex;
+    justify-content: end;
+    padding-bottom: 25px;
+    padding-right: 25px;
+    /* margin-top: 20px; */
+}

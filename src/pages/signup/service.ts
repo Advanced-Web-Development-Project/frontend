@@ -15,11 +15,19 @@ export const validateUser = ({ username, email, password, matchedPassword }: Use
 }
 
 export const initialUser: DynamicUser = {
+    id: '',
     username: '',
     name: '',
     email: '',
     password: '',
     matchedPassword: '',
+};
+
+export const initProfile: Partial<DynamicUser> = {
+    id: '',
+    username: '',
+    name: '',
+    email: '',
 };
 
 export const userOutput: UserOnScreen[] = [
@@ -28,4 +36,10 @@ export const userOutput: UserOnScreen[] = [
     { key: 'username', desc: 'User Name', type: "text" },
     { key: 'password', desc: 'Password', type: "password" },
     { key: 'matchedPassword', desc: 'Matched Password', type: "password" },
+]
+
+export const profileOutput: UserOnScreen[] = [
+    { key: 'email', desc: 'Email', type: "text" },
+    { key: 'name', desc: 'Name', type: "text" },
+    { key: 'username', desc: 'User Name', type: "text" },
 ]

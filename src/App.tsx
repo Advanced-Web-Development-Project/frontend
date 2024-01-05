@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from "react-router-dom"
 import Home from './pages/home/home';
 import Login from './pages/login/login';
@@ -8,11 +8,30 @@ import Profile from './pages/profile/profile';
 import './App.css';
 import { Alert } from '@mui/material';
 import { useErrorContext } from './contexts/ErrorContext';
+import { useAuth } from './contexts/AuthContexts';
+import { UserStorageInfo } from './models/general';
 
 
 function App() {
 
-  // const { error, } = useErrorContext()
+  const { login } = useAuth()
+
+  const initializeAuth = () => {
+
+    const userStorage = localStorage.getItem('userInfo')
+    if (!userStorage) return
+
+    const userInfo: UserStorageInfo = JSON.parse(userStorage);
+
+    if (userInfo) {
+      login(userInfo.accessToken, userInfo.user)
+    }
+  };
+
+  useEffect(() => {
+    initializeAuth();
+  }, [])
+
   return (
     <>
       <Navbar />
@@ -22,8 +41,6 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/profile' element={<Profile />} />
       </Routes>
-      {/* {error.display && <Alert className='alert__container' severity={error.seveirity}><span>{error.message}</span></Alert>} */}
-
     </>
 
   );
