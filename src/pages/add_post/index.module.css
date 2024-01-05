@@ -1,15 +1,18 @@
 .page {
+    display: flex;
+    flex-direction: column;
     position: relative;
     padding: 40px 70px 40px 70px;
-    width: 100%;
 }
 
 .text_box {
+    margin-top: 10px;
     width: 400px;
 }
 
-.content {
-    margin-top: 20px;
+.wide_text_box {
+    margin-top: 40px;
+    width: 400px;
 }
 
 .button_row {
@@ -18,4 +21,8 @@
     padding-bottom: 25px;
     padding-right: 25px;
     /* margin-top: 20px; */
+}
+
+.input__fileUpload {
+    margin-top: 30px;
 }

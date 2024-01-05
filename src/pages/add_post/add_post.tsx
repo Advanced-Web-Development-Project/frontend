@@ -9,6 +9,10 @@ function AddPost() {
 
     const { setPage } = useDialogContext()
 
+    const handleUploadImage = (event: any) => {
+        console.log(event)
+    }
+
 
 
     return (
@@ -24,16 +28,26 @@ function AddPost() {
                     maxRows={4}
                 />
                 <TextField
-                    className={`${styles.text_box} ${styles.content}`}
+                    className={styles.wide_text_box}
                     placeholder='Text'
                     multiline
                     rows={10}
                     maxRows={10}
                 />
 
+                <div className={styles.input__fileUpload}>
+                    <input
+                        onChange={handleUploadImage}
+                        type="file"
+                        accept="image/*"
+                        id="imageInput"
+                    />
+                </div>
+
             </div>
+
             <div className={styles.button_row}>
-                <Button variant='contained' color='warning'>Upload</Button>
+                <Button variant='contained' color='warning'>Submit</Button>
             </div>
 
         </>
