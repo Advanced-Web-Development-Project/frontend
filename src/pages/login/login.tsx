@@ -15,7 +15,6 @@ interface LoginProps {
 function Login({ }: LoginProps) {
 
     const { login } = useAuth();
-    const navigate = useNavigate();
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -27,9 +26,15 @@ function Login({ }: LoginProps) {
 
     const handleLogin = async () => {
         try {
+            // debugger;
             const response = await loginAPI(email, password);
             const accessToken = response.data.token
-            const user = response.data.userInfo
+            const user = response.data.data.userInfo
+
+            localStorage.setItem('userInfo', JSON.stringify({
+                accessToken: accessToken,
+                user: user
+            }));
 
             login(accessToken, user)
             setPage(DialogPage.None)

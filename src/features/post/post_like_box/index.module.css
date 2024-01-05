@@ -5,3 +5,7 @@
     align-items: center;
     height: 100%;
 }
+
+.user_like {
+    color: orangered !important;
+}

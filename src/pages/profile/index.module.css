@@ -1,0 +1,91 @@
+.card {
+    /* position: relative; */
+    padding: 30px;
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card__picture {
+    width: 200px;
+    height: 130px;
+    border-radius: 25px;
+}
+
+.card__form {
+    margin-top: 60px;
+    padding-bottom: 20px;
+    display: flex;
+    /* align-items: center; */
+    flex-direction: column;
+}
+
+.closeIcon {
+    position: absolute !important;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.input {
+    width: 400px;
+    height: 30px;
+    border-radius: 30px;
+    border: 1px solid rgb(130, 153, 231);
+    padding: 10px;
+    margin-top: 25px;
+    font-size: 14px;
+    font-style: oblique;
+}
+
+.submitButton {
+    height: 30px;
+    border-radius: 10px;
+    color: white;
+    background-color: #0288d1;
+    border: 1px solid rgb(211, 205, 205);
+}
+
+.inputError {
+    border-color: red;
+}
+
+.card__button {
+    margin-left: 10px;
+}
+
+.card__header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+}
+
+.card__person {
+    padding-right: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card__picture__buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.card__name {
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.card__email {
+    color: #0288d1
+}
+
+.card__saveButton {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}

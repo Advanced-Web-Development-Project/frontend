@@ -25,6 +25,11 @@ const Navbar: React.FC = () => {
     setPage(DialogPage.Signup)
   }
 
+  const handleProfile = () => {
+    setPage(DialogPage.Profile)
+  }
+
+
   return (
 
     <nav className={styles.navbar}>
@@ -59,7 +64,7 @@ const Navbar: React.FC = () => {
 
         {isLoggedIn ? (
           <>
-            <IconButton className={styles.navbar_home_icon}>
+            <IconButton className={styles.navbar_home_icon} onClick={handleProfile}>
               <Person fontSize='large' />
             </IconButton>
             <Button onClick={logout}  >Logout</Button>

@@ -14,3 +14,9 @@ export const userSchema = yup.object().shape({
         .required('Password confirmation is required')
         .oneOf([yup.ref('password')], 'Passwords must match'),
 });
+
+export const postSchema = yup.object().shape({
+    username: yup.string().required('Username is required'),
+    name: yup.string().required('name is required'),
+    email: yup.string().required('Email is required'),
+});

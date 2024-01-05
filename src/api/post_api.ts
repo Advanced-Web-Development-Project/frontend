@@ -17,6 +17,9 @@ export const getAllPostsAPI = async (): Promise<Post[]> => {
     return postsToSend
 }
 
-const convertDates = () => {
-
-} 
+export const patchPostAPI = async (partialPost: Partial<Post>, postId: string): Promise<Post[]> => {
+    console.log(partialPost, "post")
+    const response = await server.patch(`/posts/${postId}`, partialPost);
+    const postData = response.data.data
+    return postData
+}
