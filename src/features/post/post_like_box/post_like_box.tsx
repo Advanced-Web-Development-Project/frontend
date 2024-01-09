@@ -10,7 +10,8 @@ import { patchPostAPI } from "../../../api/post_api";
 interface PostLikeBoxProps {
     likes: string[],
     dislikes: string[],
-    postId: string
+    postId: string,
+    style?: React.CSSProperties; // Add style prop
 }
 
 enum LikeStatus {
@@ -19,19 +20,15 @@ enum LikeStatus {
     Dislike = "DISLIKE"
 }
 
-function PostLikeBox({ likes, dislikes, postId }: PostLikeBoxProps) {
+function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
 
     const { user } = useAuth()
     const [status, setStatus] = useState<LikeStatus>(LikeStatus.None)
     const [countLikes, setCountLikes] = useState(likes.length)
 
 
-    // const isUserLiked = likes.find(userliked => userliked === user?.id) !== undefined
-    // const isUserDisliked = dislikes.find(userliked => userliked === user?.id) !== undefined
-
     useEffect(() => {
 
-        debugger;
 
         if (!user) return
 
@@ -87,7 +84,7 @@ function PostLikeBox({ likes, dislikes, postId }: PostLikeBoxProps) {
     }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} style={style}>
             <IconButton className={`${styles.navbar_home_icon} ${status === LikeStatus.Like ? styles.user_like : ''}`} onClick={handleLikeClick} >
                 <ArrowUpwardSharp fontSize='small' />
             </IconButton>

@@ -1,15 +1,12 @@
 import React, { useEffect } from 'react';
 import { Route, Routes } from "react-router-dom"
 import Home from './pages/home/home';
-import Login from './pages/login/login';
-import Signup from './pages/signup/signup';
 import Navbar from './pages/navbar/navbar';
 import Profile from './pages/profile/profile';
 import './App.css';
-import { Alert } from '@mui/material';
-import { useErrorContext } from './contexts/ErrorContext';
 import { useAuth } from './contexts/AuthContexts';
 import { UserStorageInfo } from './models/general';
+import PostPage from './pages/specific_post/post_page';
 
 
 function App() {
@@ -35,12 +32,13 @@ function App() {
   return (
     <>
       <Navbar />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/profile' element={<Profile />} />
-      </Routes>
+      <div className='main'>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/post' element={<PostPage />} />
+          <Route path='/profile' element={<Profile />} />
+        </Routes>
+      </div>
     </>
 
   );

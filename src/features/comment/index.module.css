@@ -1,0 +1,17 @@
+.container {
+    cursor: pointer;
+    padding-bottom: 10px;
+    /* background-color: gray; */
+
+}
+
+.user {
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+.text {
+    font-size: 14px;
+    color: rgb(160, 157, 157);
+    margin-left: 10px;
+}

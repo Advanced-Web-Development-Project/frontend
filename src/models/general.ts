@@ -28,14 +28,11 @@ export type UserStorageInfo = {
     user: User // json stringed
 }
 
-// export type User
-
 export enum DialogPage {
     None = "NONE",
     Login = "LOGIN",
     Signup = "SIGNUP",
     AddPost = "ADDPOST",
-    Profile = "PROFILE"
 }
 
 // export type DynamicUser = User | { [key: string]: string }

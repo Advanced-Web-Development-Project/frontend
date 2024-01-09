@@ -16,6 +16,7 @@ const Navbar: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const { isLoggedIn, logout } = useAuth()
+  const navigate = useNavigate()
 
   const handleLogin = () => {
     setPage(DialogPage.Login)
@@ -26,7 +27,7 @@ const Navbar: React.FC = () => {
   }
 
   const handleProfile = () => {
-    setPage(DialogPage.Profile)
+    navigate('/profile')
   }
 
 

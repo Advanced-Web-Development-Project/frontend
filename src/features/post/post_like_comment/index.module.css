@@ -1,0 +1,10 @@
+.comments_likes_row {
+    display: flex;
+    cursor: pointer;
+}
+
+.card__info__bottom {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+}
