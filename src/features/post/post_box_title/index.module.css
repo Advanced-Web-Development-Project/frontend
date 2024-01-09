@@ -1,0 +1,22 @@
+.card__title {
+    font-size: 20px;
+    font-weight: bold;
+
+    max-height: 50px;
+    width: 350px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.card__subTitle {
+    font-size: 16px;
+    color: rgb(179, 176, 176);
+
+    max-height: 50px;
+    width: 250px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

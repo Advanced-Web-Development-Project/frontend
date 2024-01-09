@@ -8,7 +8,7 @@ import LoginPage from './../../pages/login/login'
 import SignupPage from './../../pages/signup/signup'
 import ProfilePage from './../../pages/profile/profile'
 import AddPost from './../../pages/add_post/add_post'
-import ShowPostPage from "./../../pages/post/post_page"
+import ShowPostPage from "../../pages/specific_post/post_page"
 
 interface DialogConatinerProps {
     children?: ReactNode;
@@ -33,10 +33,6 @@ const DialogConatiner: React.FC<DialogConatinerProps> = ({ children }: DialogCon
                 return <SignupPage />
             case DialogPage.AddPost:
                 return <AddPost />
-            case DialogPage.Profile:
-                return <ProfilePage />
-            case DialogPage.ShowPost:
-                return <ShowPostPage />
             case DialogPage.None:
                 return <></>
         }

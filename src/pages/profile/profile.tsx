@@ -41,7 +41,6 @@ function Profile() {
     return (
         <div className={styles.card}>
 
-
             <div className={styles.card__header}>
 
                 <div className={styles.card__person}>
@@ -63,8 +62,6 @@ function Profile() {
             </div>
 
             <form className={styles.page} onSubmit={handleSubmit}>
-
-                <IconButton className={styles.closeIcon} onClick={() => setPage(DialogPage.None)}>X</IconButton>
 
                 <div className={styles.card__form}>
 

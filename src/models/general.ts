@@ -33,8 +33,6 @@ export enum DialogPage {
     Login = "LOGIN",
     Signup = "SIGNUP",
     AddPost = "ADDPOST",
-    Profile = "PROFILE",
-    ShowPost = "SHOW_POST"
 }
 
 // export type DynamicUser = User | { [key: string]: string }
