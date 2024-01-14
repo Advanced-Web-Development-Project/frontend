@@ -14,13 +14,15 @@ function PostList({ }: PostListProps) {
 
     const [posts, setPosts] = useState<Post[] | null>(null)
 
+    const fetchData = async () => {
+        const postsData = await getAllPostsAPI()
+        console.log(postsData[0])
+        setPosts(postsData)
+    }
+
     useEffect(() => {
         try {
-            const fetchData = async () => {
-                debugger;
-                const postsData = await getAllPostsAPI()
-                setPosts(postsData)
-            }
+
             fetchData();
         } catch (error) {
             console.log(error)

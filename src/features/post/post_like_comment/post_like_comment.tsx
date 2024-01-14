@@ -2,22 +2,30 @@
 import { IconButton } from "@mui/material";
 import styles from "./index.module.css"
 import { CommentTwoTone } from "@mui/icons-material";
-import React from "react";
+import { useEffect } from "react";
+import { Comment, Post } from "../../../models/general";
+import { getCommentsByPost } from "../../../api/post_api";
+
+
 
 
 interface PostLikeCommentProps {
-    setShowComments?: React.Dispatch<React.SetStateAction<boolean>>,
-    showComments?: boolean | undefined
+    type: "DISPLAY" | "SHOW",
+    handleShowComment?: () => void,
+    comments: string[] | Comment[],
 }
 
-function PostLikeComment({ setShowComments, showComments }: PostLikeCommentProps) {
+function PostLikeComment({ comments, type, handleShowComment }: PostLikeCommentProps) {
 
-    const handleCommentsClick = () => {
-        if (setShowComments) {
-            setShowComments(!showComments)
-        }
+    useEffect(() => {
+    }, [])
+
+
+
+    const handleCommentsClick = async () => {
+        if (type === 'DISPLAY') return
+        handleShowComment!();
     }
-
 
 
     return (
@@ -29,17 +37,12 @@ function PostLikeComment({ setShowComments, showComments }: PostLikeCommentProps
                         <CommentTwoTone fontSize='small' />
                     </IconButton>
                     <div>
-                        {`4 Comments`}
+                        {`${comments.length} Comments`}
                     </div>
                 </div>
-                <div className={styles.card__info__bottom}>
-                    <IconButton>
-                        <CommentTwoTone fontSize='small' />
-                    </IconButton>
-                    <div>
-                        {`4 Likes`}
-                    </div>
-                </div>
+
+
+
             </div>
         </>
 

@@ -4,7 +4,7 @@ import styles from "./index.module.css"
 import { ArrowUpward, ArrowDownwardRounded, ArrowUpwardSharp, ArrowDownward, ArrowBackIosNew } from '@mui/icons-material/';
 import { useAuth } from "../../../contexts/AuthContexts";
 import { useEffect, useState } from "react";
-import { patchPostAPI } from "../../../api/post_api";
+import { dislikePostAPI, likePostAPI, patchPostAPI } from "../../../api/post_api";
 
 
 interface PostLikeBoxProps {
@@ -22,10 +22,13 @@ enum LikeStatus {
 
 function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
 
-    const { user } = useAuth()
+    const { user, accessToken } = useAuth()
     const [status, setStatus] = useState<LikeStatus>(LikeStatus.None)
-    const [countLikes, setCountLikes] = useState(likes.length)
 
+    const [currLikes, setCurrLikes] = useState(likes)
+    const [currdislikes, setCurrDislikes] = useState(dislikes)
+
+    const totalLikesCalculated = currLikes.length - currdislikes.length
 
     useEffect(() => {
 
@@ -44,7 +47,6 @@ function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
     }, [])
 
 
-
     useEffect(() => {
         if (user) {
             const likeStatus = likes.find(userId => userId === user.id)
@@ -54,41 +56,71 @@ function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
     }, [user])
 
 
-    const handleLikeClick = () => {
+    const handleLikeClick = async () => {
 
         if (!user) return
-        if (status === LikeStatus.Like) return
 
-        const newDisLikes = dislikes.filter(userDisliked => userDisliked !== user.id)
+        try {
 
-        // if (!isUserLiked) {
-        setCountLikes(count => count + 1)
-        setStatus(LikeStatus.Like)
-        patchPostAPI({ likes: [...likes, user.id], dislikes: newDisLikes }, postId)
-        // }
+            const response = await likePostAPI(postId, accessToken!)
+
+            if (status === LikeStatus.Like) {
+
+                setCurrLikes(currLikes.filter(id => id !== user.id))
+                setStatus(LikeStatus.None)
+
+            } else if (status === LikeStatus.Dislike) {
+
+                setCurrDislikes(currdislikes.filter(id => id !== user.id))
+                setCurrLikes([...currLikes, user.id])
+                setStatus(LikeStatus.Like)
+            } else {
+                setCurrLikes([...currLikes, user.id])
+                setStatus(LikeStatus.Like)
+            }
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    const handleDislikeClick = async () => {
+
+        if (!user) return
+
+        try {
+
+            const response = await dislikePostAPI(postId, accessToken!)
+
+            if (status === LikeStatus.Dislike) {
+
+                setCurrDislikes(currdislikes.filter(id => id !== user.id))
+                setStatus(LikeStatus.None)
+
+            } else if (status === LikeStatus.Like) {
+
+                setCurrLikes(currLikes.filter(id => id !== user.id))
+                setCurrDislikes([...currdislikes, user.id])
+                setStatus(LikeStatus.Dislike)
+            } else {
+                setCurrDislikes([...currdislikes, user.id])
+                setStatus(LikeStatus.Dislike)
+            }
+
+
+        } catch (err) {
+            console.log(err)
+        }
+
 
     }
 
-    const handleDislikeClick = () => {
-
-        if (!user) return
-        if (status === LikeStatus.Dislike) return
-
-        const newLikes = likes.filter(userLiked => userLiked !== user.id)
-
-        // if (!isUserDisliked) {
-        setCountLikes(newLikes.length)
-        setStatus(LikeStatus.Dislike)
-        patchPostAPI({ dislikes: [...dislikes, user.id], likes: newLikes }, postId)
-        // }
-    }
 
     return (
         <div className={styles.container} style={style}>
             <IconButton className={`${styles.navbar_home_icon} ${status === LikeStatus.Like ? styles.user_like : ''}`} onClick={handleLikeClick} >
                 <ArrowUpwardSharp fontSize='small' />
             </IconButton>
-            <div>{countLikes}</div>
+            <div>{totalLikesCalculated}</div>
             <IconButton className={`${styles.navbar_home_icon} ${status === LikeStatus.Dislike ? styles.user_like : ''}`} onClick={handleDislikeClick}>
                 <ArrowDownward fontSize='small' />
             </IconButton>
