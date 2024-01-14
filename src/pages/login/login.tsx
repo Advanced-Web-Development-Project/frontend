@@ -26,9 +26,8 @@ function Login({ }: LoginProps) {
 
     const handleLogin = async () => {
         try {
-            // debugger;
             const response = await loginAPI(email, password);
-            const accessToken = response.data.token
+            const accessToken = response.data.data.token
             const user = response.data.data.userInfo
 
             localStorage.setItem('userInfo', JSON.stringify({

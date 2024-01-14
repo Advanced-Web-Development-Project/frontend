@@ -1,6 +1,6 @@
-import { User, DynamicUser } from "../../models/general"
+import { User, UserOS, DynamicUserOS } from "../../models/general"
 
-type keyofUSer = keyof User
+type keyofUSer = keyof UserOS
 
 type UserOnScreen = {
     key: keyofUSer,
@@ -8,13 +8,13 @@ type UserOnScreen = {
     type: "text" | "password"
 }
 
-export const validateUser = ({ username, email, password, matchedPassword }: User) => {
+export const validateUser = ({ username, email, password, matchedPassword }: UserOS) => {
     if (username.trim() === "" || email.trim() === "" || password.trim() === "" || matchedPassword.trim() === "") return "Fill all the requierd fields"
     if (password !== matchedPassword) return "Passwords dont match"
     return ""
 }
 
-export const initialUser: DynamicUser = {
+export const initialUser: UserOS = {
     id: '',
     username: '',
     name: '',
@@ -23,7 +23,7 @@ export const initialUser: DynamicUser = {
     matchedPassword: '',
 };
 
-export const initProfile: Partial<DynamicUser> = {
+export const initProfile: Partial<DynamicUserOS> = {
     id: '',
     username: '',
     name: '',

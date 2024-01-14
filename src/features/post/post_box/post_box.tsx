@@ -16,12 +16,17 @@ interface PostBoxProps {
 }
 function PostBox({ post }: PostBoxProps) {
 
-    const { title, likes, user, createdAt, dislikes, _id } = post
+    const { title, likes, user, createdAt, dislikes, _id, comments } = post
+    const navigate = useNavigate();
+
+    if (!post) return <></>
 
     const postTimestep = timeAgo(createdAt.getTime())
     const info = `Posted by ${user.username} ${postTimestep}`
+    // const info = `Posted by  ${postTimestep}`
 
-    const navigate = useNavigate();
+
+
 
     const handlePostClicked = () => {
         navigate('/post', { state: { post } });
@@ -40,7 +45,7 @@ function PostBox({ post }: PostBoxProps) {
                 />
                 <div className={styles.card__info} >
                     <PostBoxTitle title={title} info={info}></PostBoxTitle>
-                    <PostLikeComment></PostLikeComment>
+                    <PostLikeComment type='DISPLAY' comments={post.comments}></PostLikeComment>
                 </div>
             </div>
         </Card>

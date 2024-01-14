@@ -4,7 +4,7 @@ import { initialUser, userOutput } from './service';
 import { useFormik } from 'formik'
 import { userSchema } from '../../validation';
 import { signupAPI } from '../../api';
-import { DialogPage, DynamicUser, User } from '../../models/general';
+import { DialogPage, User, UserOS } from '../../models/general';
 import { login } from '../navbar/service';
 import { useNavigate } from 'react-router';
 import { useDialogContext } from '../../contexts/PageContext';
@@ -17,14 +17,16 @@ function SignUp() {
     const { setPage } = useDialogContext()
     const { setError } = useErrorContext()
 
+
+
     const { values, handleBlur, handleChange, handleSubmit, errors, touched } = useFormik({
         initialValues: initialUser,
         validationSchema: userSchema,
-        onSubmit: async (user: User) => {
+        onSubmit: async (user: UserOS) => {
 
             try {
 
-                const response: any = await signupAPI(user)
+                const response = await signupAPI(user)
                 const accessToken = response.data.token
                 const userInfo = response.data.userInfo
 
@@ -33,9 +35,8 @@ function SignUp() {
 
 
             } catch (error: any) {
-
-                alert()
-                setError({ display: true, message: "Email is not valid", seveirity: 'error' })
+                const errorMessage = error.response.data.errors[0]
+                setError({ display: true, message: errorMessage, seveirity: 'error' })
             }
         },
 

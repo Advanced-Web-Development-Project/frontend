@@ -8,3 +8,13 @@
     display: flex;
     align-items: center;
 }
+
+
+.comment_wrapper {
+    padding-bottom: 15px;
+}
+
+.devider {
+    border-bottom: 1px solid rgb(241, 167, 98);
+    width: 100%;
+}

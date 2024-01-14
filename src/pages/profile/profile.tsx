@@ -6,7 +6,7 @@ import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
 import { initProfile, initialUser, profileOutput, userOutput } from '../signup/service';
 import { postSchema, userSchema } from '../../validation';
-import { DialogPage, User } from '../../models/general';
+import { DialogPage, User, UserOS } from '../../models/general';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import { useDialogContext } from '../../contexts/PageContext';
 
@@ -16,7 +16,7 @@ function Profile() {
     const { setError } = useErrorContext()
     const { setPage } = useDialogContext()
 
-    const { values, handleBlur, handleChange, handleSubmit, errors, touched } = useFormik<Partial<User>>({
+    const { values, handleBlur, handleChange, handleSubmit, errors, touched } = useFormik<Partial<UserOS>>({
         initialValues: initProfile,
         validationSchema: postSchema,
         onSubmit: async (user: Partial<User>) => {
@@ -35,8 +35,6 @@ function Profile() {
             }
         },
     })
-
-    console.log("ERRORS : ", errors)
 
     return (
         <div className={styles.card}>
