@@ -4,7 +4,7 @@ import styles from "./index.module.css"
 import { CommentTwoTone } from "@mui/icons-material";
 import { useEffect } from "react";
 import { Comment, Post } from "../../../models/general";
-import { getCommentsByPost } from "../../../api/post_api";
+import { getCommentsByPost } from "../../../api/commnet_api";
 
 
 

@@ -15,7 +15,7 @@ export const userSchema = yup.object().shape({
         .oneOf([yup.ref('password')], 'Passwords must match'),
 });
 
-export const postSchema = yup.object().shape({
+export const userUpdateSchema = yup.object().shape({
     username: yup.string().required('Username is required'),
     name: yup.string().required('name is required'),
     email: yup.string().required('Email is required'),

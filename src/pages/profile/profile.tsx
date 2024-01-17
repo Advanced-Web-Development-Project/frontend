@@ -1,40 +1,83 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContexts';
 import styles from './index.module.css'
 import no_image from "./../../pictures/no_image.jpg"
 import { Button, IconButton } from '@mui/material';
 import { useFormik } from 'formik';
-import { initProfile, initialUser, profileOutput, userOutput } from '../signup/service';
-import { postSchema, userSchema } from '../../validation';
+import { profileOutput } from '../signup/service';
+import { userUpdateSchema } from '../../validation';
 import { DialogPage, User, UserOS } from '../../models/general';
 import { useErrorContext } from '../../contexts/ErrorContext';
-import { useDialogContext } from '../../contexts/PageContext';
+import { deleteUserAPI, updateUserAPI } from '../../api/user_api';
+
+
+type ProfileFileds = {
+    username: string;
+    email: string;
+    name: string;
+    [key: string]: any;
+
+}
+
+const initialProfileFields: ProfileFileds = {
+    email: "",
+    name: "",
+    username: ""
+}
 
 function Profile() {
 
-
     const { setError } = useErrorContext()
-    const { setPage } = useDialogContext()
+    const [oldUser, setOldUser] = useState<ProfileFileds>(initialProfileFields)
+    const [screenEditable, setScreenEditable] = useState(false)
+    const { accessToken, user } = useAuth()
 
-    const { values, handleBlur, handleChange, handleSubmit, errors, touched } = useFormik<Partial<UserOS>>({
-        initialValues: initProfile,
-        validationSchema: postSchema,
+    useEffect(() => {
+
+        if (!user) return
+
+        const { email, name, username } = user
+        setOldUser({ email, name, username })
+
+    }, [])
+
+
+
+
+    const { values, handleBlur, handleChange, handleSubmit, errors, touched } = useFormik<ProfileFileds>({
+        initialValues: oldUser,
+        validationSchema: userUpdateSchema,
+        enableReinitialize: true,
         onSubmit: async (user: Partial<User>) => {
+
+            debugger;
+
+            if (!accessToken) return
 
             try {
 
-                // const response: any = await signupAPI(user)
-                // const accessToken = response.data.token
-                // const userInfo = response.data.userInfo
-
+                const response: any = await updateUserAPI(user.username!, accessToken, user)
+                console.log(" RES @@@ - ", response)
+                // setOldUser({})
 
             } catch (error: any) {
 
-                alert()
-                setError({ display: true, message: "Email is not valid", seveirity: 'error' })
+                const errorMessage = error.response.data.message
+                // setError({ display: true, message: errorMessage, seveirity: 'error' })
             }
         },
     })
+
+    if (!user || !accessToken) return <></>
+
+    const handleEditClick = () => {
+        setScreenEditable(screen => !screen)
+    }
+
+    const handleDleteClick = async () => {
+        const res = await deleteUserAPI(user.id, accessToken, values)
+        console.log(res)
+    }
 
     return (
         <div className={styles.card}>
@@ -48,8 +91,8 @@ function Profile() {
                         alt="Circular Avatar"
                     />
                     <div className={styles.card__picture__buttons}>
-                        <Button variant='contained' color='primary' size='small' className={styles.card__button}>Edit</Button>
-                        <Button variant='contained' color='error' size='small' className={styles.card__button}>Remove</Button>
+                        <Button variant='contained' color='primary' size='small' className={styles.card__button} onClick={handleEditClick}>Edit</Button>
+                        <Button variant='contained' color='error' size='small' className={styles.card__button} onClick={handleDleteClick}>Remove</Button>
                     </div>
                 </div>
 
@@ -64,29 +107,33 @@ function Profile() {
                 <div className={styles.card__form}>
 
                     {profileOutput.map(({ key, type, desc }) => {
+
                         return (
                             <>
+                                <div className={styles.input_headline}>{desc}</div>
                                 <input
                                     type={type}
                                     id={key}
                                     className={`${styles.input} ${(errors[key] && touched[key] ? styles.inputError : "")}`}
-                                    placeholder={desc}
+                                    disabled={!screenEditable}
                                     onChange={handleChange}
                                     value={values[key]}
                                     onBlur={handleBlur}
                                 >
                                 </input>
-                                {errors[key] && touched[key] && <span className={styles.error}>{errors[key]}</span>}
+                                {errors[key] && touched[key] && <span className={styles.error}>{`${errors[key]}`}</span>}
                             </>
                         )
                     })}
                 </div>
 
-            </form >
 
-            <div className={styles.card__saveButton}>
-                <Button variant='contained' color='primary' > Save</Button>
-            </div>
+                {screenEditable && <div className={styles.card__saveButton}>
+                    <Button type='submit' variant='contained' color='primary' > Save</Button>
+                </div>}
+
+
+            </form >
 
         </div >
     );

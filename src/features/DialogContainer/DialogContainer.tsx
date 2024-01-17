@@ -2,7 +2,7 @@ import { Alert, Dialog } from '@mui/material';
 import React, { ReactNode } from 'react';
 import styles from './index.module.css'
 import { useDialogContext } from '../../contexts/PageContext';
-import { DialogPage } from '../../models/general';
+import { DialogPage, Post } from '../../models/general';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import LoginPage from './../../pages/login/login'
 import SignupPage from './../../pages/signup/signup'
@@ -11,10 +11,12 @@ import AddPost from './../../pages/add_post/add_post'
 import ShowPostPage from "../../pages/specific_post/post_page"
 
 interface DialogConatinerProps {
-    children?: ReactNode;
+    children?: ReactNode,
+    setPosts: React.Dispatch<React.SetStateAction<Post[]>>,
+
 }
 
-const DialogConatiner: React.FC<DialogConatinerProps> = ({ children }: DialogConatinerProps) => {
+const DialogConatiner: React.FC<DialogConatinerProps> = ({ children, setPosts }: DialogConatinerProps) => {
 
     const { page, setPage } = useDialogContext()
     const { error } = useErrorContext()
@@ -32,7 +34,7 @@ const DialogConatiner: React.FC<DialogConatinerProps> = ({ children }: DialogCon
             case DialogPage.Signup:
                 return <SignupPage />
             case DialogPage.AddPost:
-                return <AddPost />
+                return <AddPost setPosts={setPosts} />
             case DialogPage.None:
                 return <></>
         }

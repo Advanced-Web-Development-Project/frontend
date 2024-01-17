@@ -4,7 +4,7 @@ import { Comment } from '../../models/general'
 import { IconButton } from '@mui/material'
 import { Delete } from '@mui/icons-material/';
 import { useAuth } from '../../contexts/AuthContexts';
-import { deleteComment } from '../../api/post_api';
+import { deleteComment } from '../../api/commnet_api';
 
 interface CommentProps {
     comment: Comment,

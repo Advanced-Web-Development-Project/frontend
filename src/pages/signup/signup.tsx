@@ -3,7 +3,7 @@ import styles from "./index.module.css"
 import { initialUser, userOutput } from './service';
 import { useFormik } from 'formik'
 import { userSchema } from '../../validation';
-import { signupAPI } from '../../api';
+import { signupAPI } from '../../api/auth_api';
 import { DialogPage, User, UserOS } from '../../models/general';
 import { login } from '../navbar/service';
 import { useNavigate } from 'react-router';
@@ -25,6 +25,8 @@ function SignUp() {
         onSubmit: async (user: UserOS) => {
 
             try {
+
+                debugger;
 
                 const response = await signupAPI(user)
                 const accessToken = response.data.token
