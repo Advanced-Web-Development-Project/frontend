@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Link, IconButton } from '@mui/material'
 import styles from "./index.module.css"
-import { loginAPI } from '../../api';
+import { loginAPI } from '../../api/auth_api';
 import { useAuth } from '../../contexts/AuthContexts';
 import { useNavigate } from 'react-router-dom';
 import { useDialogContext } from '../../contexts/PageContext';
@@ -26,6 +26,7 @@ function Login({ }: LoginProps) {
 
     const handleLogin = async () => {
         try {
+            // debugger;
             const response = await loginAPI(email, password);
             const accessToken = response.data.data.token
             const user = response.data.data.userInfo
@@ -40,9 +41,13 @@ function Login({ }: LoginProps) {
 
         } catch (error: any) {
 
-            const errors: string[] = error.response.data.errors
-            const message = errors.reduce((acc, curr) => acc + curr)
-            setError({ display: true, message: message, seveirity: 'error' })
+            console.log(error)
+
+            // throw error
+
+            // const errors: string[] = error.response.data.errors
+            // const message = errors.reduce((acc, curr) => acc + curr)
+            // setError({ display: true, message: message, seveirity: 'error' })
         }
     }
 

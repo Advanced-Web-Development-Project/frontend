@@ -26,9 +26,9 @@ export type DynamicUserOS = UserOS & {
 };
 
 export type Post = {
-    _id: string,
+    postId: string,
     comments: string[],
-    user: User,
+    username: string,
     title: string,
     imagePath: string,
     likes: string[],
@@ -39,10 +39,9 @@ export type Post = {
 }
 
 export type PostOnScreen = {
-    comments: string[],
-    userId: string,
+    // userId: string,
     title: string,
-    imagePath: string,
+    imagePath?: string,
     content: string,
 }
 

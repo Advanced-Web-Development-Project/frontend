@@ -15,6 +15,8 @@ function App() {
 
   const initializeAuth = () => {
 
+    debugger;
+
     const userStorage = localStorage.getItem('userInfo')
     if (!userStorage) return
 

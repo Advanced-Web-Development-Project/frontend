@@ -6,17 +6,17 @@ import { Post } from "../../../models/general"
 import PostBox from "../post_box/post_box"
 
 interface PostListProps {
-
+    posts: Post[],
+    setPosts: React.Dispatch<React.SetStateAction<Post[]>>
 }
 
-function PostList({ }: PostListProps) {
+function PostList({ setPosts, posts }: PostListProps) {
 
 
-    const [posts, setPosts] = useState<Post[] | null>(null)
+    // const [posts, setPosts] = useState<Post[] | null>(null)
 
     const fetchData = async () => {
         const postsData = await getAllPostsAPI()
-        console.log(postsData[0])
         setPosts(postsData)
     }
 

@@ -8,14 +8,15 @@ import { useAuth } from '../../contexts/AuthContexts';
 
 
 const initialPost: PostOnScreen = {
-    imagePath: "",
+    // imagePath: "",
     title: "",
-    userId: "",
-    comments: [],
     content: "",
-
 }
-function AddPost() {
+
+interface AddPostProps {
+    setPosts: React.Dispatch<React.SetStateAction<Post[]>>
+}
+function AddPost({ setPosts: setPostsList }: AddPostProps) {
 
     const { setPage } = useDialogContext()
 
@@ -36,8 +37,9 @@ function AddPost() {
         if (!accessToken) return
 
         try {
-            const res = await createPost(post, accessToken)
-            console.log(res)
+            const newPost = await createPost(post, accessToken)
+            setPostsList(postsList => [...postsList, newPost])
+            // console.log(res)
         } catch (err) {
             console.log(err)
         }

@@ -32,7 +32,7 @@
     border-radius: 30px;
     border: 1px solid rgb(130, 153, 231);
     padding: 10px;
-    margin-top: 25px;
+    /* margin-top: 25px; */
     font-size: 14px;
     font-style: oblique;
 }
@@ -86,4 +86,10 @@
     width: 100%;
     display: flex;
     justify-content: end;
+}
+
+.input_headline {
+    padding: 10px;
+    font-weight: bold;
+    color: rgba(221, 140, 64, 0.726);
 }

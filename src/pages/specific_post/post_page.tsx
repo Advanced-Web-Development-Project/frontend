@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import PostBoxTitle from '../../features/post/post_box_title/post_box_title';
 import { timeAgo } from '../../features/post/serviec';
 import { Button, IconButton, TextField } from '@mui/material';
-import { createComment, getCommentsByPost } from '../../api/post_api';
+import { createComment, getCommentsByPost } from '../../api/commnet_api';
 import { useAuth } from '../../contexts/AuthContexts';
 import UserComment from './../../features/comment/Comment';
 
@@ -21,7 +21,7 @@ function PostPage({ }: PostPageProps) {
     const navigate = useNavigate()
     const location = useLocation();
 
-    const post = location.state?.post
+    const post: Post = location.state?.post
 
     // const [post, setPost] = useState<Post>()
     const [text, setText] = useState("")
@@ -38,14 +38,15 @@ function PostPage({ }: PostPageProps) {
 
     if (!post) return <></>
 
-    const { likes, dislikes, title, createdAt, user, _id, comments } = post
+    const { likes, dislikes, title, createdAt, postId, comments, username } = post
 
     const postTimestep = timeAgo(createdAt.getTime())
-    const info = `Posted by ${user.username} ${postTimestep}`
+    const info = `Posted by ${username} ${postTimestep}`
 
 
     const getComments = async () => {
-        const response: Comment[] = await getCommentsByPost(post._id);
+        console.log(post)
+        const response: Comment[] = await getCommentsByPost(post.postId);
         setCurrComments(response)
     }
 
@@ -58,7 +59,7 @@ function PostPage({ }: PostPageProps) {
         if (!accessToken || !userLoggedIn) return
 
         try {
-            const comment: CommentDB = await createComment(post._id, accessToken, { content: text, username: userLoggedIn.username })
+            const comment: CommentDB = await createComment(postId, accessToken, { content: text, username: userLoggedIn.username })
             setCurrComments([...currComments, comment])
         } catch (error) {
             console.log(error)
@@ -80,7 +81,7 @@ function PostPage({ }: PostPageProps) {
 
                 <div className={styles.headline}>
                     <div className={styles.left_header} >
-                        <PostLikeBox {...{ likes, dislikes, postId: _id, style: { backgroundColor: "white" } }} />
+                        <PostLikeBox {...{ likes, dislikes, postId: postId, style: { backgroundColor: "white" } }} />
                         <PostBoxTitle  {...{ info, title }}></PostBoxTitle>
                     </div>
 

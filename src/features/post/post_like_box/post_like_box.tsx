@@ -4,7 +4,7 @@ import styles from "./index.module.css"
 import { ArrowUpward, ArrowDownwardRounded, ArrowUpwardSharp, ArrowDownward, ArrowBackIosNew } from '@mui/icons-material/';
 import { useAuth } from "../../../contexts/AuthContexts";
 import { useEffect, useState } from "react";
-import { dislikePostAPI, likePostAPI, patchPostAPI } from "../../../api/post_api";
+import { dislikePostAPI, likePostAPI } from "../../../api/post_api";
 
 
 interface PostLikeBoxProps {
