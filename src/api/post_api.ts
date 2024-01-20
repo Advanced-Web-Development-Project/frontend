@@ -48,7 +48,7 @@ export const createPost = async (post: PostOnScreen, accessToken: string): Promi
     const response = await server.post(`/posts/`, post, {
         headers: {
             'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         }
     })
     const postResult: Post = response.data.data
@@ -70,5 +70,18 @@ export const getSpecificPost = async (postId: string): Promise<Post> => {
         updatedAt: new Date(post.updatedAt)
     } as Post
 
+}
+
+export const getAllPostsByCategory = async (category: string): Promise<Post[]> => {
+    const response = await server.get(`/posts/category/${category}`);
+    const posts = response.data.data
+    const postsToSend = posts.map((post: Post) => {
+        return {
+            ...post,
+            createdAt: new Date(post.createdAt),
+            updatedAt: new Date(post.updatedAt)
+        } as Post
+    })
+    return postsToSend
 }
 

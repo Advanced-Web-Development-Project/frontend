@@ -9,7 +9,6 @@ import { useErrorContext } from '../../contexts/ErrorContext';
 
 
 const initialPost: PostOnScreen = {
-    // imagePath: "",
     title: "",
     content: "",
 }
@@ -26,14 +25,19 @@ function AddPost({ setPosts: setPostsList }: AddPostProps) {
 
     const { accessToken } = useAuth()
 
-    const handlePostChange = (prop: keyof Post, value: string) => {
+    const handlePostChange = (prop: keyof PostOnScreen, value: string) => {
         setPost({ ...post, [prop]: value })
     }
 
     const handleUploadImage = (event: any) => {
+        const file = event.target.files[0]
+        console.log("uploaded image, ", file)
+        handlePostChange('image', file)
     }
 
+
     const handlePostSubmit = async () => {
+        debugger;
 
         if (!accessToken) return
 

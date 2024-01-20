@@ -8,6 +8,7 @@ import { useAuth } from './contexts/AuthContexts';
 import { UserStorageInfo } from './models/general';
 import PostPage from './pages/specific_post/post_page';
 import MessageBox from './gen_components/MessageBox/MessageBox';
+import { getPictureAPI } from './api/picture_api';
 
 
 function App() {
@@ -25,9 +26,21 @@ function App() {
       login(userInfo.accessToken, userInfo.user)
     }
   };
+  const loadPicture = async () => {
+
+    // debugger;
+    try {
+      const res = await getPictureAPI('images/default/default-post-image.png')
+      console.log("resposen: ", res)
+    } catch (err) {
+      console.log("error: ", err)
+    }
+
+  }
 
   useEffect(() => {
     initializeAuth();
+    loadPicture();
   }, [])
 
   return (
