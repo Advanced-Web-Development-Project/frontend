@@ -13,7 +13,7 @@ export const updateUserAPI = async (username: string, accessToken: string, user:
     return editedUser
 }
 
-export const deleteUserAPI = async (userId: string, accessToken: string, user: Partial<User>): Promise<User> => {
+export const deleteUserAPI = async (userId: string, accessToken: string): Promise<User> => {
     const response = await server.delete(`/users/${userId}` as const, {
         headers: {
             'Authorization': `Bearer ${accessToken}`,

@@ -19,7 +19,6 @@ interface DialogConatinerProps {
 const DialogConatiner: React.FC<DialogConatinerProps> = ({ children, setPosts }: DialogConatinerProps) => {
 
     const { page, setPage } = useDialogContext()
-    const { error } = useErrorContext()
 
     const handleClose = () => {
         setPage(DialogPage.None)
@@ -44,16 +43,8 @@ const DialogConatiner: React.FC<DialogConatinerProps> = ({ children, setPosts }:
 
         <>
             <Dialog className={styles.container} open={toOpen} onClose={handleClose} maxWidth="md">
-
                 {selectPage(page)}
-
-                {error !== null &&
-                    <div className={styles.alert_container}>
-                        <Alert className={styles.alert} severity={error.seveirity}><span>{error.message}</span></Alert>
-                    </div>}
             </Dialog>
-
-
         </>
     );
 }

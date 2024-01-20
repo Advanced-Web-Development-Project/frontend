@@ -9,9 +9,12 @@
 }
 
 .alert_container {
-    display: flex;
-    justify-content: center;
-    padding-bottom: 20px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 16px;
+    z-index: 1000;
+    /* Adjust the z-index as needed */
 }
 
 .page_container {

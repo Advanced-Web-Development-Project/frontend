@@ -61,3 +61,14 @@ export const createPost = async (post: PostOnScreen, accessToken: string): Promi
 
 }
 
+export const getSpecificPost = async (postId: string): Promise<Post> => {
+    const response = await server.get(`/posts/${postId}`);
+    const post = response.data.data
+    return {
+        ...post,
+        createdAt: new Date(post.createdAt),
+        updatedAt: new Date(post.updatedAt)
+    } as Post
+
+}
+

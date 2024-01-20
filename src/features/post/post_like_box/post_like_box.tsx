@@ -4,7 +4,7 @@ import styles from "./index.module.css"
 import { ArrowUpward, ArrowDownwardRounded, ArrowUpwardSharp, ArrowDownward, ArrowBackIosNew } from '@mui/icons-material/';
 import { useAuth } from "../../../contexts/AuthContexts";
 import { useEffect, useState } from "react";
-import { dislikePostAPI, likePostAPI } from "../../../api/post_api";
+import { dislikePostAPI, getSpecificPost, likePostAPI } from "../../../api/post_api";
 
 
 interface PostLikeBoxProps {
@@ -23,15 +23,30 @@ enum LikeStatus {
 function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
 
     const { user, accessToken } = useAuth()
+
+    const [check, setCheck] = useState(likes)
+
     const [status, setStatus] = useState<LikeStatus>(LikeStatus.None)
+    const [trigger, setTrigger] = useState(false)
 
-    const [currLikes, setCurrLikes] = useState(likes)
-    const [currdislikes, setCurrDislikes] = useState(dislikes)
 
-    const totalLikesCalculated = currLikes.length - currdislikes.length
+    const totalLikesCalculated = likes.length - dislikes.length
+
+    const getCurrentStateOfPost = async () => {
+        // debugger;
+        try {
+            const res = await getSpecificPost(postId)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // useEffect(() => {
+    //     if(status === LikeStatus.None)
+
+    // }, [trigger])
 
     useEffect(() => {
-
 
         if (!user) return
 
@@ -44,7 +59,7 @@ function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
             setStatus(LikeStatus.Dislike)
             return
         }
-    }, [])
+    }, [trigger])
 
 
     useEffect(() => {
@@ -55,30 +70,18 @@ function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
         }
     }, [user])
 
+    useEffect(() => {
+
+    })
+
 
     const handleLikeClick = async () => {
 
         if (!user) return
 
         try {
-
             const response = await likePostAPI(postId, accessToken!)
-
-            if (status === LikeStatus.Like) {
-
-                setCurrLikes(currLikes.filter(id => id !== user.id))
-                setStatus(LikeStatus.None)
-
-            } else if (status === LikeStatus.Dislike) {
-
-                setCurrDislikes(currdislikes.filter(id => id !== user.id))
-                setCurrLikes([...currLikes, user.id])
-                setStatus(LikeStatus.Like)
-            } else {
-                setCurrLikes([...currLikes, user.id])
-                setStatus(LikeStatus.Like)
-            }
-
+            setTrigger(!trigger)
         } catch (err) {
             console.log(err)
         }
@@ -88,30 +91,11 @@ function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
         if (!user) return
 
         try {
-
             const response = await dislikePostAPI(postId, accessToken!)
-
-            if (status === LikeStatus.Dislike) {
-
-                setCurrDislikes(currdislikes.filter(id => id !== user.id))
-                setStatus(LikeStatus.None)
-
-            } else if (status === LikeStatus.Like) {
-
-                setCurrLikes(currLikes.filter(id => id !== user.id))
-                setCurrDislikes([...currdislikes, user.id])
-                setStatus(LikeStatus.Dislike)
-            } else {
-                setCurrDislikes([...currdislikes, user.id])
-                setStatus(LikeStatus.Dislike)
-            }
-
-
+            setTrigger(!trigger)
         } catch (err) {
             console.log(err)
         }
-
-
     }
 
 

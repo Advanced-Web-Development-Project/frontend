@@ -15,7 +15,7 @@ function SignUp() {
     const navigate = useNavigate();
 
     const { setPage } = useDialogContext()
-    const { setError } = useErrorContext()
+    const { setMessage } = useErrorContext()
 
 
 
@@ -25,9 +25,6 @@ function SignUp() {
         onSubmit: async (user: UserOS) => {
 
             try {
-
-                debugger;
-
                 const response = await signupAPI(user)
                 const accessToken = response.data.token
                 const userInfo = response.data.userInfo
@@ -38,7 +35,7 @@ function SignUp() {
 
             } catch (error: any) {
                 const errorMessage = error.response.data.errors[0]
-                setError({ display: true, message: errorMessage, seveirity: 'error' })
+                setMessage({ display: true, message: errorMessage, seveirity: 'error' })
             }
         },
 

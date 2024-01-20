@@ -30,6 +30,15 @@ const Navbar: React.FC = () => {
     navigate('/profile')
   }
 
+  const handleLogout = () => {
+    logout()
+    navigate('/', { replace: true })
+  }
+
+  const handleHome = () => {
+    navigate('/', { replace: true })
+  }
+
 
   return (
 
@@ -44,7 +53,7 @@ const Navbar: React.FC = () => {
         />
 
 
-        <IconButton className={styles.navbar_home_icon}>
+        <IconButton className={styles.navbar_home_icon} onClick={handleHome}>
           <Home fontSize='large' />
         </IconButton>
 
@@ -68,7 +77,7 @@ const Navbar: React.FC = () => {
             <IconButton className={styles.navbar_home_icon} onClick={handleProfile}>
               <Person fontSize='large' />
             </IconButton>
-            <Button onClick={logout}  >Logout</Button>
+            <Button onClick={handleLogout}  >Logout</Button>
           </>
         ) : (
           <>

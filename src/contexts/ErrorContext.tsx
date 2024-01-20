@@ -11,7 +11,7 @@ type ErrorInfo = {
 interface ErrorContextProps {
 
     error: ErrorInfo
-    setError: (error: ErrorInfo) => void;
+    setMessage: (error: ErrorInfo) => void;
 }
 
 const ErrorContext = createContext<ErrorContextProps | undefined>(undefined);
@@ -31,14 +31,14 @@ export const ErrorProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const [error, setValueError] = useState<ErrorInfo>(null);
 
-    const setError = (error: ErrorInfo) => {
+    const setMessage = (error: ErrorInfo) => {
         setValueError(error)
         setTimeout(() => setValueError(null), 3000)
     }
 
     const contextValue: ErrorContextProps = {
         error,
-        setError,
+        setMessage,
     };
 
     return (

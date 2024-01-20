@@ -20,15 +20,14 @@ function Login({ }: LoginProps) {
     const [password, setPassword] = useState('')
 
     const { setPage } = useDialogContext()
-    const { setError } = useErrorContext()
+    const { setMessage } = useErrorContext()
 
 
 
     const handleLogin = async () => {
         try {
-            // debugger;
             const response = await loginAPI(email, password);
-            const accessToken = response.data.data.token
+            const accessToken = response.data.data.accessToken
             const user = response.data.data.userInfo
 
             localStorage.setItem('userInfo', JSON.stringify({
@@ -47,7 +46,7 @@ function Login({ }: LoginProps) {
 
             // const errors: string[] = error.response.data.errors
             // const message = errors.reduce((acc, curr) => acc + curr)
-            // setError({ display: true, message: message, seveirity: 'error' })
+            // setMessage({ display: true, message: message, seveirity: 'error' })
         }
     }
 

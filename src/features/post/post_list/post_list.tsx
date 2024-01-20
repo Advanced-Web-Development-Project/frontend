@@ -7,22 +7,24 @@ import PostBox from "../post_box/post_box"
 
 interface PostListProps {
     posts: Post[],
-    setPosts: React.Dispatch<React.SetStateAction<Post[]>>
+    setPosts: React.Dispatch<React.SetStateAction<Post[]>>,
+    setOriginalPosts: React.Dispatch<React.SetStateAction<Post[]>>
 }
 
-function PostList({ setPosts, posts }: PostListProps) {
+function PostList({ setPosts, posts, setOriginalPosts }: PostListProps) {
 
 
-    // const [posts, setPosts] = useState<Post[] | null>(null)
+    //  const [postList, setPostLike] = useState<Post[] | null>(posts)
 
     const fetchData = async () => {
         const postsData = await getAllPostsAPI()
+        console.log("DATA: @@@ - ", postsData)
         setPosts(postsData)
+        setOriginalPosts(postsData)
     }
 
     useEffect(() => {
         try {
-
             fetchData();
         } catch (error) {
             console.log(error)

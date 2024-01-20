@@ -9,6 +9,8 @@ import { useDialogContext } from "../../../contexts/PageContext";
 import PostLikeComment from '../post_like_comment/post_like_comment';
 import PostBoxTitle from '../post_box_title/post_box_title';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getPictureAPI } from '../../../api/picture_api';
 
 
 interface PostBoxProps {
@@ -17,7 +19,12 @@ interface PostBoxProps {
 function PostBox({ post }: PostBoxProps) {
 
     const { title, likes, username, createdAt, dislikes, postId, comments } = post
+    const [imagePath, setImagePath] = useState("")
     const navigate = useNavigate();
+
+    useEffect(() => {
+        loadPicture();
+    }, [])
 
     if (!post) return <></>
 
@@ -26,6 +33,11 @@ function PostBox({ post }: PostBoxProps) {
 
     const handlePostClicked = () => {
         navigate('/post', { state: { post } });
+    }
+    const loadPicture = async () => {
+        const res = await getPictureAPI(post.imagePath)
+        // setImagePath()
+        console.log(res)
     }
 
     return (

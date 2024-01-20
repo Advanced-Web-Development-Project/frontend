@@ -1,7 +1,8 @@
 .container {
     cursor: pointer;
-    padding-bottom: 10px;
+    /* padding-bottom: 10px; */
     display: flex;
+    align-items: center;
     justify-content: space-between;
     /* background-color: gray; */
 
@@ -20,4 +21,24 @@
 
 .deleteIcon {
     margin-top: 10px;
+}
+
+.horizontal_line {
+    border-bottom: 1px solid rgb(206, 203, 203);
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.input {
+
+    width: 250px;
+    margin-top: 10px;
+    font-size: 14px;
+    font-style: oblique;
+    padding: 10px;
+}
+
+.input_wrapper {
+    display: flex;
+    align-items: center;
 }

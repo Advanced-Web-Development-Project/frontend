@@ -9,6 +9,7 @@ import { userUpdateSchema } from '../../validation';
 import { DialogPage, User, UserOS } from '../../models/general';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import { deleteUserAPI, updateUserAPI } from '../../api/user_api';
+import { useNavigate } from 'react-router-dom';
 
 
 type ProfileFileds = {
@@ -27,10 +28,10 @@ const initialProfileFields: ProfileFileds = {
 
 function Profile() {
 
-    const { setError } = useErrorContext()
+    const { setMessage } = useErrorContext()
     const [oldUser, setOldUser] = useState<ProfileFileds>(initialProfileFields)
     const [screenEditable, setScreenEditable] = useState(false)
-    const { accessToken, user } = useAuth()
+    const { accessToken, user, logout } = useAuth()
 
     useEffect(() => {
 
@@ -41,8 +42,20 @@ function Profile() {
 
     }, [])
 
+    const getUpdatedFieldFromUser = (oldUserFields: ProfileFileds, newUserFields: ProfileFileds) => {
+        let result: any = {}
+        Object.keys(oldUser).forEach(key => {
+            if (key in newUserFields && oldUserFields[key] !== newUserFields[key]) {
+                result[key] = newUserFields[key]
+            }
+        })
 
 
+        console.log(result)
+        return result
+    }
+
+    const navigate = useNavigate();
 
     const { values, handleBlur, handleChange, handleSubmit, errors, touched } = useFormik<ProfileFileds>({
         initialValues: oldUser,
@@ -50,20 +63,21 @@ function Profile() {
         enableReinitialize: true,
         onSubmit: async (user: Partial<User>) => {
 
-            debugger;
+            const updatedUser = getUpdatedFieldFromUser(oldUser, values);
 
-            if (!accessToken) return
+            if (Object.keys(updatedUser).length === 0 || !accessToken) return
 
             try {
 
-                const response: any = await updateUserAPI(user.username!, accessToken, user)
-                console.log(" RES @@@ - ", response)
-                // setOldUser({})
+                const response: any = await updateUserAPI(oldUser.username, accessToken, updatedUser)
+                logout();
+                navigate(-1)
+                console.log(response)
 
             } catch (error: any) {
 
                 const errorMessage = error.response.data.message
-                // setError({ display: true, message: errorMessage, seveirity: 'error' })
+
             }
         },
     })
@@ -75,9 +89,17 @@ function Profile() {
     }
 
     const handleDleteClick = async () => {
-        const res = await deleteUserAPI(user.id, accessToken, values)
-        console.log(res)
+        try {
+            const res = await deleteUserAPI(user.id, accessToken)
+            logout();
+            navigate(-1)
+        } catch (error) {
+            console.log(error)
+        }
+
     }
+
+
 
     return (
         <div className={styles.card}>
