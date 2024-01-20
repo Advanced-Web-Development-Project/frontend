@@ -38,7 +38,7 @@ function PostPage({ }: PostPageProps) {
 
     if (!post) return <></>
 
-    const { likes, dislikes, title, createdAt, postId, comments, username } = post
+    const { likes, dislikes, title, createdAt, postId, comments, username, imagePath } = post
 
     const postTimestep = timeAgo(createdAt.getTime())
     const info = `Posted by ${username} ${postTimestep}`
@@ -74,6 +74,8 @@ function PostPage({ }: PostPageProps) {
         setShowComments(!showComments)
     }
 
+    const computedImagePath = `http://localhost:8000/${imagePath}`
+
     return (
         <>
             <div className={styles.container}>
@@ -91,7 +93,7 @@ function PostPage({ }: PostPageProps) {
                 </div>
                 <img
                     className={styles.image}
-                    src={no_image}
+                    src={computedImagePath}
                     alt="Circular Avatar"
                 />
 

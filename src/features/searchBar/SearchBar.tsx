@@ -3,6 +3,7 @@ import styles from './index.module.css'
 import IconWithTextButton from '../../gen_components/IconWithTextButton.tsx/IconWithTextButton'
 import { Fireplace, NewReleases } from '@mui/icons-material/';
 import { Post } from '../../models/general';
+import { getAllPostsByCategory } from '../../api/post_api';
 
 
 interface SearchBarProps {
@@ -29,6 +30,16 @@ function SearchBar({ setPosts, posts }: SearchBarProps) {
         return scoreB - scoreA;
     };
 
+    const getSportPosts = async () => {
+        try {
+            const posts = await getAllPostsByCategory('sports')
+            setPosts([...posts])
+            // console.log(response)
+        } catch (err) {
+
+        }
+    }
+
     const sortNewPosts = () => { }
     return (
         <div className={styles.main}>
@@ -44,11 +55,14 @@ function SearchBar({ setPosts, posts }: SearchBarProps) {
 
             </div>
             <div className={styles.main__right}>
-                <IconWithTextButton onClick={sortHotPosts} text='Hot'>
+                <IconWithTextButton onClick={sortHotPosts} text='Technology'>
                     <Fireplace></Fireplace>
                 </IconWithTextButton>
-                <IconWithTextButton onClick={sortNewPosts} text='New'>
+                <IconWithTextButton onClick={getSportPosts} text='Sport'>
                     <NewReleases></NewReleases>
+                </IconWithTextButton>
+                <IconWithTextButton onClick={sortHotPosts} text='Sience'>
+                    <Fireplace></Fireplace>
                 </IconWithTextButton>
             </div>
 

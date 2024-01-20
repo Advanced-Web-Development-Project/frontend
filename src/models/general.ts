@@ -41,7 +41,7 @@ export type Post = {
 export type PostOnScreen = {
     // userId: string,
     title: string,
-    imagePath?: string,
+    image?: string,
     content: string,
 }
 

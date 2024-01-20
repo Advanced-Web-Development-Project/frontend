@@ -46,6 +46,10 @@ function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
 
     // }, [trigger])
 
+
+    // write the set like status 
+    const setLikeStatus = () => { }
+
     useEffect(() => {
 
         if (!user) return
@@ -77,10 +81,13 @@ function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
 
     const handleLikeClick = async () => {
 
+        debugger;
+
         if (!user) return
 
         try {
             const response = await likePostAPI(postId, accessToken!)
+            console.log("RESPONSE ", response)
             setTrigger(!trigger)
         } catch (err) {
             console.log(err)

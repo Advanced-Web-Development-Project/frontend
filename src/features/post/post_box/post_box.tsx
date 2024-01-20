@@ -18,13 +18,17 @@ interface PostBoxProps {
 }
 function PostBox({ post }: PostBoxProps) {
 
-    const { title, likes, username, createdAt, dislikes, postId, comments } = post
-    const [imagePath, setImagePath] = useState("")
+    const { title, likes, username, createdAt, dislikes, postId, comments, imagePath } = post
+    // const [imagePath, setImagePath] = useState("")
     const navigate = useNavigate();
 
     useEffect(() => {
-        loadPicture();
+        // loadPicture();
     }, [])
+
+    const computedImagePath = `http://localhost:8000/${imagePath}`
+
+    console.log("IMAGEE ", computedImagePath)
 
     if (!post) return <></>
 
@@ -34,11 +38,17 @@ function PostBox({ post }: PostBoxProps) {
     const handlePostClicked = () => {
         navigate('/post', { state: { post } });
     }
-    const loadPicture = async () => {
-        const res = await getPictureAPI(post.imagePath)
-        // setImagePath()
-        console.log(res)
-    }
+
+    // const loadPicture = async () => {
+    //     try {
+    //         const res = await getPictureAPI(post.imagePath)
+    //         console.log("resposen: ", res)
+    //     } catch (err) {
+    //         console.log("error: ", err)
+    //     }
+
+    // }
+
 
     return (
         <Card variant="outlined" className={styles.card} >
@@ -48,7 +58,7 @@ function PostBox({ post }: PostBoxProps) {
             <div className={styles.card__body} onClick={handlePostClicked}>
                 <img
                     className={styles.card__picture}
-                    src={no_image}
+                    src={computedImagePath}
                     alt="Circular Avatar"
                 />
                 <div className={styles.card__info} >
