@@ -7,6 +7,7 @@ import './App.css';
 import { useAuth } from './contexts/AuthContexts';
 import { UserStorageInfo } from './models/general';
 import PostPage from './pages/specific_post/post_page';
+import MessageBox from './gen_components/MessageBox/MessageBox';
 
 
 function App() {
@@ -14,8 +15,6 @@ function App() {
   const { login } = useAuth()
 
   const initializeAuth = () => {
-
-    debugger;
 
     const userStorage = localStorage.getItem('userInfo')
     if (!userStorage) return
@@ -40,6 +39,7 @@ function App() {
           <Route path='/post' element={<PostPage />} />
           <Route path='/profile' element={<Profile />} />
         </Routes>
+        <MessageBox></MessageBox>
       </div>
     </>
 

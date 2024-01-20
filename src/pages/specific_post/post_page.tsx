@@ -104,7 +104,7 @@ function PostPage({ }: PostPageProps) {
                             {currComments.map((comment) => {
                                 return (
                                     <div className={styles.comment_wrapper}>
-                                        <UserComment setCurrComments={setCurrComments} comment={comment} key={comment.commentId} />
+                                        <UserComment {...{ setCurrComments, currComments, comment, postId }} key={comment.commentId} />
                                         <div className={styles.devider}></div>
                                     </div>
                                 )
@@ -119,7 +119,7 @@ function PostPage({ }: PostPageProps) {
                     onChange={(e) => setText(e.target.value)}
                     placeholder='Text'
                     multiline
-                    rows={5}
+                    rows={4}
                     maxRows={10}
                 />
                 <div className={styles.comment_button}>

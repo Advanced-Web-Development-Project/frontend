@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import styles from './index.module.css'
 import { useDialogContext } from '../../contexts/PageContext';
 import { Button, TextField } from '@mui/material';
-import { Post, PostOnScreen } from '../../models/general';
+import { DialogPage, Post, PostOnScreen } from '../../models/general';
 import { createPost } from '../../api/post_api';
 import { useAuth } from '../../contexts/AuthContexts';
+import { useErrorContext } from '../../contexts/ErrorContext';
 
 
 const initialPost: PostOnScreen = {
@@ -19,6 +20,7 @@ interface AddPostProps {
 function AddPost({ setPosts: setPostsList }: AddPostProps) {
 
     const { setPage } = useDialogContext()
+    const { setMessage } = useErrorContext()
 
     const [post, setPost] = useState<PostOnScreen>(initialPost)
 
@@ -29,7 +31,6 @@ function AddPost({ setPosts: setPostsList }: AddPostProps) {
     }
 
     const handleUploadImage = (event: any) => {
-        debugger;
     }
 
     const handlePostSubmit = async () => {
@@ -39,8 +40,11 @@ function AddPost({ setPosts: setPostsList }: AddPostProps) {
         try {
             const newPost = await createPost(post, accessToken)
             setPostsList(postsList => [...postsList, newPost])
-            // console.log(res)
+            setMessage({ display: true, message: "Post has been added", seveirity: "success" })
+            setTimeout(() => setPage(DialogPage.None), 1000)
+
         } catch (err) {
+            setMessage({ display: true, message: "Post has been added", seveirity: "success" })
             console.log(err)
         }
     }

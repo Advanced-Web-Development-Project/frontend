@@ -1,6 +1,6 @@
 #root {
     height: 100vh;
-    background-color: rgb(212, 220, 241);
+    /* background-color: rgb(212, 220, 241); */
 
 }
 
@@ -11,8 +11,11 @@ body {
 }
 
 .main {
-    margin-top: 50px;
+    min-height: calc(100vh - 70px);
+    /* padding-top: 50px; */
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
+    background-color: rgb(212, 220, 241);
 }
