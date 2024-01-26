@@ -6,6 +6,9 @@ import { Post } from '../../models/general';
 import { useEffect, useState } from 'react';
 import SearchBar from '../../features/searchBar/SearchBar';
 import MessageBox from '../../gen_components/MessageBox/MessageBox';
+import LoadingSpinner from '../../gen_components/LoadingSpinner';
+import { useLoading } from '../../contexts/LoadingSpinnerContext';
+import useFetchPosts from '../../hooks/useFetchPosts';
 
 
 function Home() {
@@ -13,21 +16,22 @@ function Home() {
     const [posts, setPosts] = useState<Post[]>([])
     const [originalPosts, setOriginalPosts] = useState<Post[]>([])
 
-    useEffect(() => {
-        console.log(" POST: ", [posts])
-    }, [posts])
-
+    const [loading, setLoading] = useState(false)
 
     return (
         <>
             <DialogConatiner setPosts={setPosts}> </DialogConatiner>
 
             <div className={styles.page_container}>
-                <div className={styles.inside__container}>
-                    <AddPostInput></AddPostInput>
-                    <SearchBar {...{ setPosts, posts }}></SearchBar>
-                    <PostList {...{ setPosts, posts, setOriginalPosts }}></PostList>
-                </div>
+                {
+                    loading ? <LoadingSpinner></LoadingSpinner>
+                        : <div className={styles.inside__container}>
+                            <AddPostInput {...{ posts }}></AddPostInput>
+                            <SearchBar {...{ setPosts, posts, originalPosts }}></SearchBar>
+                            <PostList {...{ setPosts, posts, setOriginalPosts, setLoading }}></PostList>
+                        </div>
+                }
+
             </div>
 
         </>

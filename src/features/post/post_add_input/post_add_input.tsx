@@ -8,12 +8,15 @@ import { useDialogContext } from "../../../contexts/PageContext"
 import { TextField } from "@mui/material"
 import UserProfilePicture from "../../../gen_components/UserProfilePicture/UserProfilePicture"
 import no_image from "../../../pictures/no_image.jpg"
+import { useAuth } from "../../../contexts/AuthContexts"
 
 interface PostAddProps {
-
+    posts: Post[]
 }
 
-function PostAdd({ }: PostAddProps) {
+function PostAdd({ posts }: PostAddProps) {
+
+    const { user } = useAuth()
 
     const { setPage } = useDialogContext()
 
@@ -21,11 +24,15 @@ function PostAdd({ }: PostAddProps) {
         setPage(DialogPage.AddPost)
     }
 
+    // if (posts.length === 0) return <></>
+
+    if (!user) return <></>
+
 
     return (
         <div className={styles.container}>
             <div className={styles.profile_image}>
-                <UserProfilePicture alt="profiel" size="large" src={no_image} ></UserProfilePicture>
+                <UserProfilePicture alt="profiel" size="large" src={no_image} avatar={user.avatar}></UserProfilePicture>
             </div>
             <TextField
                 className={styles.input}

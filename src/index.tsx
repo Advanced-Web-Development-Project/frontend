@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom"
 import { AuthProvider } from './contexts/AuthContexts';
 import { DialogProvider } from './contexts/PageContext';
 import { ErrorProvider } from './contexts/ErrorContext';
+import { LoadingProvider } from './contexts/LoadingSpinnerContext';
 
 
 const root = ReactDOM.createRoot(
@@ -17,7 +18,9 @@ root.render(
       <AuthProvider>
         <DialogProvider>
           <ErrorProvider>
-            <App />
+            <LoadingProvider>
+              <App />
+            </LoadingProvider>
           </ErrorProvider>
         </DialogProvider>
       </AuthProvider>

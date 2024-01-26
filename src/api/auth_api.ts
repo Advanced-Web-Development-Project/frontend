@@ -2,7 +2,7 @@ import axios from 'axios';
 import { User, UserOS } from '../models/general';
 
 export const server = axios.create({
-    baseURL: 'http://localhost:8000', // Replace with your API server's URL
+    baseURL: 'http://localhost:8000',
 });
 
 export const signupAPI = async (user: UserOS) => {
@@ -14,7 +14,12 @@ export const signupAPI = async (user: UserOS) => {
     return response
 }
 
-export const loginAPI = async (email: string, password: string) => {
+export const loginAPI = async (email: string, password: string): Promise<any> => {
     const response = await server.post('/auth/login', { email, password });
+    return response
+}
+
+export const loginWithGoogleAPI = async () => {
+    const response = await server.get('/auth/google');
     return response
 } 

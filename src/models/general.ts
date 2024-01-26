@@ -9,7 +9,6 @@ export type User = {
     provider: string,
     updatedAt: Date,
     username: string,
-
 }
 
 export type UserOS = {
@@ -18,7 +17,7 @@ export type UserOS = {
     email: string,
     name: string,
     password: string,
-    matchedPassword: string
+    matchedPassword: string,
 }
 
 export type DynamicUserOS = UserOS & {

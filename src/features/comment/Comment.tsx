@@ -27,9 +27,14 @@ export default function UserComment({ comment, setCurrComments, currComments, po
     const isUseOwnComment = user?.username === comment.username
 
     const handleDeleteComment = async () => {
+
         if (!accessToken) return
-        const res = await deleteComment("65a2abe0568883b98227a975", accessToken, comment.commentId)
-        setCurrComments(comments => comments.filter(item => item.commentId !== comment.commentId))
+        try {
+            const res = await deleteComment(postId, accessToken, comment.commentId)
+            setCurrComments(comments => comments.filter(item => item.commentId !== comment.commentId))
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     const handleEditComment = () => {
@@ -39,12 +44,14 @@ export default function UserComment({ comment, setCurrComments, currComments, po
     const handleSaveComment = async () => {
 
         if (!accessToken) return
+
         try {
-            // const response = editComment(postId, accessToken, { content: contentToBeEdited, commentId: comment.commentId })
+            const response = await editComment(postId, accessToken, { content: contentToBeEdited, commentId: comment.commentId })
             const otherComments = currComments.filter(comment => comment.commentId !== commentId)
             const editedComment = { ...comment, content: contentToBeEdited }
+
             setCurrComments([...otherComments, editedComment])
-            setMessage({ display: true, message: "Comment edited Successfully", seveirity: "success" })
+            setMessage({ display: true, message: response.message, seveirity: "success" })
 
         } catch (err) {
             console.log(err)

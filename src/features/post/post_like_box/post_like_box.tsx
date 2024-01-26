@@ -5,12 +5,11 @@ import { ArrowUpward, ArrowDownwardRounded, ArrowUpwardSharp, ArrowDownward, Arr
 import { useAuth } from "../../../contexts/AuthContexts";
 import { useEffect, useState } from "react";
 import { dislikePostAPI, getSpecificPost, likePostAPI } from "../../../api/post_api";
+import { Post } from "../../../models/general";
 
 
 interface PostLikeBoxProps {
-    likes: string[],
-    dislikes: string[],
-    postId: string,
+    post: Post,
     style?: React.CSSProperties; // Add style prop
 }
 
@@ -20,75 +19,39 @@ enum LikeStatus {
     Dislike = "DISLIKE"
 }
 
-function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
+function PostLikeBox({ post, style }: PostLikeBoxProps) {
+
+    const { likes, dislikes, postId } = post
 
     const { user, accessToken } = useAuth()
+    const [currentLikes, setCurrentLikes] = useState(likes)
+    const [currentDisLikes, setCurrentDisLikes] = useState(dislikes)
 
-    const [check, setCheck] = useState(likes)
+    useEffect(() => {
+        setCurrentLikes(post.likes)
+        setCurrentDisLikes(post.dislikes)
+    }, [post])
 
-    const [status, setStatus] = useState<LikeStatus>(LikeStatus.None)
-    const [trigger, setTrigger] = useState(false)
-
-
-    const totalLikesCalculated = likes.length - dislikes.length
-
-    const getCurrentStateOfPost = async () => {
-        // debugger;
-        try {
-            const res = await getSpecificPost(postId)
-        } catch (err) {
-            console.log(err)
-        }
+    const getLikeStatus = () => {
+        if (!user) return LikeStatus.None
+        const likeStatus = currentLikes.find(id => id === user.id)
+        const disikeStatus = currentDisLikes.find(id => id === user.id)
+        return likeStatus ? LikeStatus.Like : disikeStatus ? LikeStatus.Dislike : LikeStatus.None
     }
 
-    // useEffect(() => {
-    //     if(status === LikeStatus.None)
-
-    // }, [trigger])
-
-
-    // write the set like status 
-    const setLikeStatus = () => { }
-
-    useEffect(() => {
-
-        if (!user) return
-
-        if (likes.find(userliked => userliked === user.id)) {
-            setStatus(LikeStatus.Like)
-            return
-        }
-
-        if (dislikes.find(userDisliked => userDisliked === user.id)) {
-            setStatus(LikeStatus.Dislike)
-            return
-        }
-    }, [trigger])
-
-
-    useEffect(() => {
-        if (user) {
-            const likeStatus = likes.find(userId => userId === user.id)
-            const disikeStatus = dislikes.find(userId => userId === user.id)
-            setStatus(likeStatus ? LikeStatus.Like : disikeStatus ? LikeStatus.Dislike : LikeStatus.None)
-        }
-    }, [user])
-
-    useEffect(() => {
-
-    })
-
+    const currentStatus = getLikeStatus()
+    const totalLikesCalculated = currentLikes.length - currentDisLikes.length
 
     const handleLikeClick = async () => {
 
-        debugger;
-
         if (!user) return
 
         try {
-            const response = await likePostAPI(postId, accessToken!)
-            console.log("RESPONSE ", response)
-            setTrigger(!trigger)
+            const post = await likePostAPI(postId, accessToken!)
+            const { likes, dislikes } = post.data
+            setCurrentLikes(likes)
+            setCurrentDisLikes(dislikes)
+            // setStatus(status)
         } catch (err) {
             console.log(err)
         }
@@ -98,21 +61,23 @@ function PostLikeBox({ likes, dislikes, postId, style }: PostLikeBoxProps) {
         if (!user) return
 
         try {
-            const response = await dislikePostAPI(postId, accessToken!)
-            setTrigger(!trigger)
+            const post = await dislikePostAPI(postId, accessToken!)
+            const { likes, dislikes } = post.data
+            setCurrentLikes(likes)
+            setCurrentDisLikes(dislikes)
+            // setStatus(status)
         } catch (err) {
             console.log(err)
         }
     }
 
-
     return (
         <div className={styles.container} style={style}>
-            <IconButton className={`${styles.navbar_home_icon} ${status === LikeStatus.Like ? styles.user_like : ''}`} onClick={handleLikeClick} >
+            <IconButton className={`${styles.navbar_home_icon} ${currentStatus === LikeStatus.Like ? styles.user_like : ''}`} onClick={handleLikeClick} >
                 <ArrowUpwardSharp fontSize='small' />
             </IconButton>
             <div>{totalLikesCalculated}</div>
-            <IconButton className={`${styles.navbar_home_icon} ${status === LikeStatus.Dislike ? styles.user_like : ''}`} onClick={handleDislikeClick}>
+            <IconButton className={`${styles.navbar_home_icon} ${currentStatus === LikeStatus.Dislike ? styles.user_like : ''}`} onClick={handleDislikeClick}>
                 <ArrowDownward fontSize='small' />
             </IconButton>
         </div>
