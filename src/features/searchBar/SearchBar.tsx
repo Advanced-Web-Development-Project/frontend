@@ -8,16 +8,22 @@ import { getAllPostsByCategory } from '../../api/post_api';
 
 interface SearchBarProps {
     posts: Post[],
+    originalPosts: Post[],
     setPosts: React.Dispatch<React.SetStateAction<Post[]>>
 }
 
-function SearchBar({ setPosts, posts }: SearchBarProps) {
+function SearchBar({ setPosts, posts, originalPosts }: SearchBarProps) {
 
     const sortHotPosts = () => {
-
-        const sortedHotPosts = posts.sort(sortHotPostsMethod)
-        // console.log(sortedHotPosts)
+        const sortedHotPosts = originalPosts.sort(sortHotPostsMethod)
         setPosts([...sortedHotPosts])
+    }
+
+    const sortNewestPosts = () => {
+        const sortedNewestPosts = originalPosts.sort((a, b) => {
+            return (b.createdAt.getTime() - a.createdAt.getTime())
+        })
+        setPosts([...sortedNewestPosts])
     }
 
     const sortHotPostsMethod = (a: Post, b: Post): number => {
@@ -30,17 +36,17 @@ function SearchBar({ setPosts, posts }: SearchBarProps) {
         return scoreB - scoreA;
     };
 
-    const getSportPosts = async () => {
-        try {
-            const posts = await getAllPostsByCategory('sports')
-            setPosts([...posts])
-            // console.log(response)
-        } catch (err) {
+    const getPostsByCategory = async (category: string) => {
 
+        try {
+            const posts = await getAllPostsByCategory(category)
+            setPosts([...posts])
+        } catch (err) {
+            console.log(err)
         }
     }
 
-    const sortNewPosts = () => { }
+    // if (posts.length === 0) return <></>
     return (
         <div className={styles.main}>
 
@@ -49,19 +55,19 @@ function SearchBar({ setPosts, posts }: SearchBarProps) {
                 <IconWithTextButton onClick={sortHotPosts} text='Hot'>
                     <Fireplace color='warning'></Fireplace>
                 </IconWithTextButton>
-                <IconWithTextButton onClick={sortNewPosts} text='New'>
+                <IconWithTextButton onClick={sortNewestPosts} text='New'>
                     <NewReleases></NewReleases>
                 </IconWithTextButton>
 
             </div>
             <div className={styles.main__right}>
-                <IconWithTextButton onClick={sortHotPosts} text='Technology'>
+                <IconWithTextButton onClick={() => getPostsByCategory('Technology')} text='Technology'>
                     <Fireplace></Fireplace>
                 </IconWithTextButton>
-                <IconWithTextButton onClick={getSportPosts} text='Sport'>
+                <IconWithTextButton onClick={() => getPostsByCategory('sports')} text='sports'>
                     <NewReleases></NewReleases>
                 </IconWithTextButton>
-                <IconWithTextButton onClick={sortHotPosts} text='Sience'>
+                <IconWithTextButton onClick={() => getPostsByCategory('Sience')} text='sience'>
                     <Fireplace></Fireplace>
                 </IconWithTextButton>
             </div>

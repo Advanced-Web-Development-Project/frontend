@@ -18,6 +18,8 @@ interface AddPostProps {
 }
 function AddPost({ setPosts: setPostsList }: AddPostProps) {
 
+    console.log("Add post render")
+
     const { setPage } = useDialogContext()
     const { setMessage } = useErrorContext()
 
@@ -37,8 +39,6 @@ function AddPost({ setPosts: setPostsList }: AddPostProps) {
 
 
     const handlePostSubmit = async () => {
-        debugger;
-
         if (!accessToken) return
 
         try {

@@ -83,7 +83,7 @@ function PostPage({ }: PostPageProps) {
 
                 <div className={styles.headline}>
                     <div className={styles.left_header} >
-                        <PostLikeBox {...{ likes, dislikes, postId: postId, style: { backgroundColor: "white" } }} />
+                        <PostLikeBox {...{ post, style: { backgroundColor: "white" } }} />
                         <PostBoxTitle  {...{ info, title }}></PostBoxTitle>
                     </div>
 

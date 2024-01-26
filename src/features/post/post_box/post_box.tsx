@@ -28,8 +28,6 @@ function PostBox({ post }: PostBoxProps) {
 
     const computedImagePath = `http://localhost:8000/${imagePath}`
 
-    console.log("IMAGEE ", computedImagePath)
-
     if (!post) return <></>
 
     const postTimestep = timeAgo(createdAt.getTime())
@@ -49,11 +47,13 @@ function PostBox({ post }: PostBoxProps) {
 
     // }
 
+    console.log("PATH : ", computedImagePath)
+
 
     return (
         <Card variant="outlined" className={styles.card} >
 
-            <PostLikeBox likes={likes} dislikes={dislikes} postId={postId}></PostLikeBox>
+            <PostLikeBox post={post}></PostLikeBox>
 
             <div className={styles.card__body} onClick={handlePostClicked}>
                 <img

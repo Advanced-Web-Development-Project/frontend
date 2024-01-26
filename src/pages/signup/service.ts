@@ -38,8 +38,3 @@ export const userOutput: UserOnScreen[] = [
     { key: 'matchedPassword', desc: 'Matched Password', type: "password" },
 ]
 
-export const profileOutput: UserOnScreen[] = [
-    { key: 'email', desc: 'Email', type: "text" },
-    { key: 'name', desc: 'Name', type: "text" },
-    { key: 'username', desc: 'User Name', type: "text" },
-]

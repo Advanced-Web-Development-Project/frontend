@@ -34,7 +34,7 @@ export const deleteComment = async (postId: string, accessToken: string, comment
     return response
 }
 
-export const editComment = async (postId: string, accessToken: string, comment: Partial<Comment>): Promise<CommentDB> => {
+export const editComment = async (postId: string, accessToken: string, comment: Partial<Comment>): Promise<any> => {
     const { content, commentId, } = comment
     const commentDTO = { content }
     const response = await server.patch(`/posts/${postId}/comments/${commentId}`, commentDTO, {
@@ -43,8 +43,5 @@ export const editComment = async (postId: string, accessToken: string, comment: 
             'Content-Type': 'application/json'
         }
     });
-    const commentResult: CommentDB = response.data.data
-
-    return commentResult
-
+    return response.data
 }

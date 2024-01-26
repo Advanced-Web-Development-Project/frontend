@@ -40,9 +40,6 @@ function PostLikeComment({ comments, type, handleShowComment }: PostLikeCommentP
                         {`${comments.length} Comments`}
                     </div>
                 </div>
-
-
-
             </div>
         </>
 

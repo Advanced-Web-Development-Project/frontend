@@ -27,8 +27,6 @@ function App() {
     }
   };
   const loadPicture = async () => {
-
-    // debugger;
     try {
       const res = await getPictureAPI('images/default/default-post-image.png')
       console.log("resposen: ", res)
