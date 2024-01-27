@@ -69,8 +69,8 @@ function Login({ }: LoginProps) {
 
                     <div>By continuing, you agree to our User Agreement and<br /> acknowledge that you understand the Privacy Policy.</div>
 
-                    {/* <Button variant='outlined' href='http://localhost:8000/auth/google/' onClick={handleGoogleLogin}>Contine With Google</Button> */}
-                    <Button variant='outlined' onClick={handleGoogleLogin}>Contine With Google</Button>
+                    <Button variant='outlined' href='http://localhost:8000/auth/google/' onClick={handleGoogleLogin}>Contine With Google</Button>
+                    {/* <Button variant='outlined' onClick={handleGoogleLogin}>Contine With Google</Button> */}
                     {/* <Button variant='outlined' href='http://localhost:8000/auth/google/' >Contine With Google</Button> */}
                     {/* <Button variant='outlined' href='http://localhost:8000/auth/google/' >Contine With Google</Button> */}
                     {/* <LoginGoogleButton></LoginGoogleButton> */}
