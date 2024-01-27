@@ -23,6 +23,7 @@ function AddPost({ setPosts: setPostsList }: AddPostProps) {
     const { setPage } = useDialogContext()
     const { setMessage } = useErrorContext()
 
+
     const [post, setPost] = useState<PostOnScreen>(initialPost)
 
     const { accessToken } = useAuth()
@@ -33,13 +34,26 @@ function AddPost({ setPosts: setPostsList }: AddPostProps) {
 
     const handleUploadImage = (event: any) => {
         const file = event.target.files[0]
-        console.log("uploaded image, ", file)
         handlePostChange('image', file)
+    }
+
+    const validatePost = (post: PostOnScreen) => {
+        const { content, title } = post
+        if (!content || !title) {
+            return "Fill all post requierd fields"
+        }
+        return ""
     }
 
 
     const handlePostSubmit = async () => {
+        debugger;
         if (!accessToken) return
+        const errorMessage = validatePost(post)
+        if (errorMessage) {
+            setMessage({ display: true, message: errorMessage, seveirity: "error" })
+            return
+        }
 
         try {
             const newPost = await createPost(post, accessToken)

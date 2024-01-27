@@ -70,3 +70,23 @@ export enum DialogPage {
     Signup = "SIGNUP",
     AddPost = "ADDPOST",
 }
+
+type ErrorObject = { message: string;[key: string]: unknown };
+type ErrorType = string | ErrorObject;
+
+export type HttpResponse = {
+    timeStamp: string,
+    statusCode?: number,
+    status?: string,
+    message?: string,
+    data?: object,
+    errors: ErrorType[];
+}
+
+export type HttpError = {
+    response: Response
+}
+
+type Response = {
+    data: HttpResponse
+}

@@ -3,50 +3,44 @@ import styles from './index.module.css'
 import IconWithTextButton from '../../gen_components/IconWithTextButton.tsx/IconWithTextButton'
 import { Fireplace, NewReleases } from '@mui/icons-material/';
 import { Post } from '../../models/general';
-import { getAllPostsByCategory } from '../../api/post_api';
+import { getAllPostsAPI, getAllPostsByCategory } from '../../api/post_api';
+import { sortHotPostsMethod } from './service';
 
 
 interface SearchBarProps {
     posts: Post[],
     originalPosts: Post[],
     setPosts: React.Dispatch<React.SetStateAction<Post[]>>
+    setOriginalPosts: React.Dispatch<React.SetStateAction<Post[]>>
 }
 
-function SearchBar({ setPosts, posts, originalPosts }: SearchBarProps) {
+function SearchBar({ setPosts, posts, originalPosts, setOriginalPosts }: SearchBarProps) {
 
-    const sortHotPosts = () => {
-        const sortedHotPosts = originalPosts.sort(sortHotPostsMethod)
+    const sortHotPosts = async () => {
+        const posts = await getAllPostsAPI()
+        const sortedHotPosts = posts.sort(sortHotPostsMethod)
         setPosts([...sortedHotPosts])
     }
 
-    const sortNewestPosts = () => {
-        const sortedNewestPosts = originalPosts.sort((a, b) => {
+    const sortNewestPosts = async () => {
+        const posts = await getAllPostsAPI()
+        const sortedNewestPosts = posts.sort((a, b) => {
             return (b.createdAt.getTime() - a.createdAt.getTime())
         })
         setPosts([...sortedNewestPosts])
     }
-
-    const sortHotPostsMethod = (a: Post, b: Post): number => {
-
-        const calculateScore = (post: Post) => post.likes.length - post.dislikes.length;
-
-        const scoreA = calculateScore(a);
-        const scoreB = calculateScore(b);
-
-        return scoreB - scoreA;
-    };
 
     const getPostsByCategory = async (category: string) => {
 
         try {
             const posts = await getAllPostsByCategory(category)
             setPosts([...posts])
+            setOriginalPosts([...posts])
         } catch (err) {
             console.log(err)
         }
     }
 
-    // if (posts.length === 0) return <></>
     return (
         <div className={styles.main}>
 
@@ -61,13 +55,13 @@ function SearchBar({ setPosts, posts, originalPosts }: SearchBarProps) {
 
             </div>
             <div className={styles.main__right}>
-                <IconWithTextButton onClick={() => getPostsByCategory('Technology')} text='Technology'>
+                <IconWithTextButton onClick={() => getPostsByCategory('technology')} text='Technology'>
                     <Fireplace></Fireplace>
                 </IconWithTextButton>
                 <IconWithTextButton onClick={() => getPostsByCategory('sports')} text='sports'>
                     <NewReleases></NewReleases>
                 </IconWithTextButton>
-                <IconWithTextButton onClick={() => getPostsByCategory('Sience')} text='sience'>
+                <IconWithTextButton onClick={() => getPostsByCategory('science')} text='Science'>
                     <Fireplace></Fireplace>
                 </IconWithTextButton>
             </div>
