@@ -5,7 +5,7 @@ import { loginAPI, loginWithGoogleAPI } from '../../api/auth_api';
 import { useAuth } from '../../contexts/AuthContexts';
 import { useNavigate } from 'react-router-dom';
 import { useDialogContext } from '../../contexts/PageContext';
-import { DialogPage } from '../../models/general';
+import { DialogPage, HttpErrorResponse } from '../../models/general';
 import { useErrorContext } from '../../contexts/ErrorContext';
 
 interface LoginProps {
@@ -21,7 +21,7 @@ function Login({ }: LoginProps) {
     const [password, setPassword] = useState('')
 
     const { setPage } = useDialogContext()
-    const { setMessage } = useErrorContext()
+    const { setErrorMessage } = useErrorContext()
 
     const handleUserHasLoggedIn = (response: any) => {
 
@@ -43,18 +43,18 @@ function Login({ }: LoginProps) {
         try {
             const response = await loginAPI(email, password);
             handleUserHasLoggedIn(response)
-        } catch (error: any) {
-            console.log(error)
+
+        } catch (err: any) {
+            const error: HttpErrorResponse = err
+            setErrorMessage(error.response.data.errors[0])
         }
     }
 
     const handleGoogleLogin = async () => {
         try {
             const response = await loginWithGoogleAPI()
-            // handleUserHasLoggedIn(response)
-            console.log(response)
         } catch (err) {
-            console.log(err)
+            console.log("@@@@@@@@@@@", err)
         }
     }
 
@@ -69,11 +69,7 @@ function Login({ }: LoginProps) {
 
                     <div>By continuing, you agree to our User Agreement and<br /> acknowledge that you understand the Privacy Policy.</div>
 
-                    <Button variant='outlined' href='http://localhost:8000/auth/google/' onClick={handleGoogleLogin}>Contine With Google</Button>
-                    {/* <Button variant='outlined' onClick={handleGoogleLogin}>Contine With Google</Button> */}
-                    {/* <Button variant='outlined' href='http://localhost:8000/auth/google/' >Contine With Google</Button> */}
-                    {/* <Button variant='outlined' href='http://localhost:8000/auth/google/' >Contine With Google</Button> */}
-                    {/* <LoginGoogleButton></LoginGoogleButton> */}
+                    <Button variant='outlined' href='http://localhost:8000/auth/google' onClick={handleGoogleLogin}>Contine With Google</Button>
 
                     <div className={styles.orContainer}>
                         <div className={styles.orContainer__line}></div>

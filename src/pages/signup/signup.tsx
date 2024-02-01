@@ -12,18 +12,14 @@ import { useErrorContext } from '../../contexts/ErrorContext';
 
 function SignUp() {
 
-    const navigate = useNavigate();
 
     const { setPage } = useDialogContext()
-    const { setMessage } = useErrorContext()
-
-
+    const { setErrorMessage } = useErrorContext()
 
     const { values, handleBlur, handleChange, handleSubmit, errors, touched } = useFormik({
         initialValues: initialUser,
         validationSchema: userSchema,
         onSubmit: async (user: UserOS) => {
-
             try {
                 const response = await signupAPI(user)
                 const accessToken = response.data.token
@@ -31,15 +27,11 @@ function SignUp() {
 
                 login(accessToken, userInfo)
                 setPage(DialogPage.None)
-
-
             } catch (error: any) {
                 const errorMessage = error.response.data.errors[0]
-                setMessage({ display: true, message: errorMessage, seveirity: 'error' })
+                setErrorMessage(errorMessage)
             }
         },
-
-
     });
 
     return (

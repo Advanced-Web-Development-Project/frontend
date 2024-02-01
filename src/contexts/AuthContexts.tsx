@@ -8,7 +8,8 @@ type AuthContextType = {
   user: User | null,
   isLoggedIn: boolean,
   login: (token: string, user: User) => void,
-  logout: () => void
+  logout: () => void,
+  setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
 const initialAuthContext: AuthContextType = {
@@ -16,7 +17,8 @@ const initialAuthContext: AuthContextType = {
   user: null,
   isLoggedIn: false,
   login: (token: string, user: User) => { },
-  logout: () => { }
+  logout: () => { },
+  setUser: () => {}
 }
 
 const AuthContext = createContext(initialAuthContext);
@@ -40,7 +42,7 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   return (
-    <AuthContext.Provider value={{ accessToken, user, login, logout, isLoggedIn }}>
+    <AuthContext.Provider value={{ accessToken, user, login, logout, isLoggedIn, setUser }}>
       {children}
     </AuthContext.Provider>
   );

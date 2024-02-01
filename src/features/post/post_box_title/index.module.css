@@ -3,7 +3,7 @@
     font-weight: bold;
 
     max-height: 50px;
-    width: 350px;
+    width: 550px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -15,7 +15,7 @@
     color: rgb(179, 176, 176);
 
     max-height: 50px;
-    width: 250px;
+    width: 550px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

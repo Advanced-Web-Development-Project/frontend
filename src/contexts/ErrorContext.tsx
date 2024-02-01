@@ -3,7 +3,6 @@ import { DialogPage } from '../models/general';
 import { AlertColor } from '@mui/material';
 
 type ErrorInfo = {
-    display: boolean,
     message: string,
     seveirity: AlertColor | undefined
 } | null
@@ -11,7 +10,9 @@ type ErrorInfo = {
 interface ErrorContextProps {
 
     error: ErrorInfo
-    setMessage: (error: ErrorInfo) => void;
+    setErrorMessage: (text: string) => void
+    setSuccessMessage: (text: string) => void
+    setWarningMessage: (text: string) => void
 }
 
 const ErrorContext = createContext<ErrorContextProps | undefined>(undefined);
@@ -25,20 +26,36 @@ export const useErrorContext = (): ErrorContextProps => {
     return context;
 };
 
-export const initialErorrContext = { display: false, message: '', seveirity: undefined }
+export const initialErorrContext = { message: '', seveirity: undefined }
 
 export const ErrorProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const [error, setValueError] = useState<ErrorInfo>(null);
 
-    const setMessage = (error: ErrorInfo) => {
-        setValueError(error)
+
+    const setErrorMessage = (text: string) => {
+        const errorMessage: ErrorInfo = { message: text, seveirity: 'error' }
+        setValueError(errorMessage)
+        setTimeout(() => setValueError(null), 3000)
+    }
+
+    const setSuccessMessage = (text: string) => {
+        const errorMessage: ErrorInfo = { message: text, seveirity: 'success' }
+        setValueError(errorMessage)
+        setTimeout(() => setValueError(null), 3000)
+    }
+
+    const setWarningMessage = (text: string) => {
+        const errorMessage: ErrorInfo = { message: text, seveirity: 'warning' }
+        setValueError(errorMessage)
         setTimeout(() => setValueError(null), 3000)
     }
 
     const contextValue: ErrorContextProps = {
         error,
-        setMessage,
+        setErrorMessage,
+        setSuccessMessage,
+        setWarningMessage
     };
 
     return (

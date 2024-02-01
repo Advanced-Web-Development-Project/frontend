@@ -18,45 +18,20 @@ interface PostListProps {
 
 function PostList({ setPosts, posts, setOriginalPosts, originalPosts, setLoading }: PostListProps) {
 
-    const { setMessage } = useErrorContext()
-
     const { searchTerm } = useSearchTermContext()
 
-    const fetchData = async () => {
-
-        setTimeout(async () => {
-            // setLoading(true)
-            const postsData = await getAllPostsAPI()
-            setPosts(postsData)
-            setOriginalPosts(postsData)
-            setLoading(false)
-        }, 0)
-    }
-
     useEffect(() => {
-        const filteredPosts = searchTerm === "" ? originalPosts : originalPosts.filter(post => post.title.includes(searchTerm))
+        const filteredPosts = searchTerm === "" ? originalPosts : originalPosts.filter(post => post.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
         setPosts(filteredPosts)
     }, [searchTerm])
 
-    useEffect(() => {
-        try {
-            // setLoading(true)
-            fetchData();
-        } catch (error) {
-            console.log(error)
-        }
-    }, [])
-
     if (posts.length === 0) {
-        // setMessage({ message: 'No Post availbale to this category', display: true, seveirity: 'info' })
         return <div className={styles.no_posts_container}>
             <h1 className={styles.no_posts_message}>No Posts... Please Try Another Category</h1>
         </div>
-        // <div style={{ display: "flex", justifyContent: 'center' }}>
-        //     <h1>No Post... Plz Try Other Category </h1>
-        // </div>
     }
 
+    console.log(posts)
     return (
         <>
             { }

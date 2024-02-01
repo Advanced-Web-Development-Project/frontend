@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styles from './index.module.css'
-import { Comment } from '../../models/general'
+import { Comment, HttpErrorResponse } from '../../models/general'
 import { IconButton, TextField } from '@mui/material'
 import { Delete, Edit, Save } from '@mui/icons-material/';
 import { useAuth } from '../../contexts/AuthContexts';
@@ -19,7 +19,7 @@ export default function UserComment({ comment, setCurrComments, currComments, po
     const { username, content, commentId } = comment
 
     const { user, accessToken } = useAuth()
-    const { setMessage } = useErrorContext()
+    const { setErrorMessage, setSuccessMessage } = useErrorContext()
 
     const [editable, setEditable] = useState(false)
     const [contentToBeEdited, setContentToBeEdited] = useState(content)
@@ -32,8 +32,10 @@ export default function UserComment({ comment, setCurrComments, currComments, po
         try {
             const res = await deleteComment(postId, accessToken, comment.commentId)
             setCurrComments(comments => comments.filter(item => item.commentId !== comment.commentId))
-        } catch (err) {
-            console.log(err)
+            setSuccessMessage('Message deleted')
+        } catch (err: any) {
+            const error: HttpErrorResponse = err
+            setErrorMessage(error.response.data.errors[0])
         }
     }
 
@@ -51,10 +53,11 @@ export default function UserComment({ comment, setCurrComments, currComments, po
             const editedComment = { ...comment, content: contentToBeEdited }
 
             setCurrComments([...otherComments, editedComment])
-            setMessage({ display: true, message: response.message, seveirity: "success" })
+            setSuccessMessage(response.message)
 
-        } catch (err) {
-            console.log(err)
+        } catch (err: any) {
+            const error: HttpErrorResponse = err
+            setErrorMessage(error.response.data.errors[0])
         }
     }
 

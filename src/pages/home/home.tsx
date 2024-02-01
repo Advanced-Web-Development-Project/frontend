@@ -2,10 +2,13 @@ import styles from './index.module.css'
 import DialogConatiner from '../../features/DialogContainer/DialogContainer';
 import PostList from '../../features/post/post_list/post_list';
 import AddPostInput from '../../features/post/post_add_input/post_add_input'
-import { Post } from '../../models/general';
-import { useState } from 'react';
+import { DialogPage, Post } from '../../models/general';
+import { useEffect, useState } from 'react';
 import SearchBar from '../../features/searchBar/SearchBar';
 import LoadingSpinner from '../../gen_components/LoadingSpinner';
+import { getAllPostsAPI } from '../../api/post_api';
+import { useErrorContext } from '../../contexts/ErrorContext';
+import { useDialogContext } from '../../contexts/PageContext';
 
 
 
@@ -13,8 +16,35 @@ function Home() {
 
     const [posts, setPosts] = useState<Post[]>([])
     const [originalPosts, setOriginalPosts] = useState<Post[]>([])
-
     const [loading, setLoading] = useState(false)
+    const { page } = useDialogContext()
+
+    const fetchData = async () => {
+        try {
+            const postsData = await getAllPostsAPI()
+            setPosts(postsData)
+            setOriginalPosts(postsData)
+            setLoading(false)
+        } catch (err) {
+            setLoading(false)
+            console.log(err)
+        }
+    }
+
+    // useEffect(() => {
+    //     debugger;
+    //     if (page === DialogPage.None)
+    //         fetchData();
+    // }, [page])
+
+    useEffect(() => {
+        try {
+            setLoading(true)
+            fetchData();
+        } catch (error) {
+            console.log(error)
+        }
+    }, [])
 
     return (
         <>

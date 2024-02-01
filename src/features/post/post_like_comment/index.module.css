@@ -4,14 +4,13 @@
 }
 
 .card__info__bottom {
-    margin-top: 15px;
     display: flex;
     align-items: center;
 }
 
 
 .comment_wrapper {
-    padding-bottom: 15px;
+    /* padding-bottom: 15px; */
 }
 
 .devider {

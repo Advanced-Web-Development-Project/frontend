@@ -4,13 +4,16 @@ import styles from "./index.module.css"
 import { ArrowUpward, ArrowDownwardRounded, ArrowUpwardSharp, ArrowDownward, ArrowBackIosNew } from '@mui/icons-material/';
 import { useAuth } from "../../../contexts/AuthContexts";
 import { useEffect, useState } from "react";
-import { dislikePostAPI, getSpecificPost, likePostAPI } from "../../../api/post_api";
-import { Post } from "../../../models/general";
+import { dislikePostAPI, likePostAPI } from "../../../api/post_api";
+import { HttpErrorResponse, Post } from "../../../models/general";
+import { useErrorContext } from "../../../contexts/ErrorContext";
+import { TextMessages } from "../../../contants/message_error";
 
 
 interface PostLikeBoxProps {
-    post: Post,
+    post: Post | null,
     style?: React.CSSProperties; // Add style prop
+    setPost: React.Dispatch<React.SetStateAction<Post | null>>
 }
 
 enum LikeStatus {
@@ -19,28 +22,26 @@ enum LikeStatus {
     Dislike = "DISLIKE"
 }
 
-function PostLikeBox({ post, style }: PostLikeBoxProps) {
+function PostLikeBox({ post, style, setPost }: PostLikeBoxProps) {
 
-    const { likes, dislikes, postId } = post
+    const { likes, dislikes, postId } = post!
 
     const { user, accessToken } = useAuth()
-    const [currentLikes, setCurrentLikes] = useState(likes)
-    const [currentDisLikes, setCurrentDisLikes] = useState(dislikes)
+    const { setErrorMessage } = useErrorContext()
+    const { likePostMessage } = TextMessages
 
     useEffect(() => {
-        setCurrentLikes(post.likes)
-        setCurrentDisLikes(post.dislikes)
     }, [post])
 
     const getLikeStatus = () => {
         if (!user) return LikeStatus.None
-        const likeStatus = currentLikes.find(id => id === user.id)
-        const disikeStatus = currentDisLikes.find(id => id === user.id)
+        const likeStatus = likes.find(id => id === user.id)
+        const disikeStatus = dislikes.find(id => id === user.id)
         return likeStatus ? LikeStatus.Like : disikeStatus ? LikeStatus.Dislike : LikeStatus.None
     }
 
     const currentStatus = getLikeStatus()
-    const totalLikesCalculated = currentLikes.length - currentDisLikes.length
+    const totalLikesCalculated = likes.length - dislikes.length
 
     const handleLikeClick = async () => {
 
@@ -49,11 +50,15 @@ function PostLikeBox({ post, style }: PostLikeBoxProps) {
         try {
             const post = await likePostAPI(postId, accessToken!)
             const { likes, dislikes } = post.data
-            setCurrentLikes(likes)
-            setCurrentDisLikes(dislikes)
-            // setStatus(status)
-        } catch (err) {
-            console.log(err)
+            setPost((prev) => {
+                return {
+                    ...prev,
+                    likes,
+                    dislikes
+                } as Post
+            })
+        } catch (err: any) {
+            setErrorMessage(likePostMessage.error)
         }
     }
     const handleDislikeClick = async () => {
@@ -63,9 +68,13 @@ function PostLikeBox({ post, style }: PostLikeBoxProps) {
         try {
             const post = await dislikePostAPI(postId, accessToken!)
             const { likes, dislikes } = post.data
-            setCurrentLikes(likes)
-            setCurrentDisLikes(dislikes)
-            // setStatus(status)
+            setPost((prev) => {
+                return {
+                    ...prev,
+                    likes,
+                    dislikes
+                } as Post
+            })
         } catch (err) {
             console.log(err)
         }

@@ -3,9 +3,10 @@ import styles from './index.module.css'
 import { useDialogContext } from '../../contexts/PageContext';
 import { Button, TextField } from '@mui/material';
 import { DialogPage, Post, PostOnScreen } from '../../models/general';
-import { createPost } from '../../api/post_api';
+import { createPostAPI } from '../../api/post_api';
 import { useAuth } from '../../contexts/AuthContexts';
 import { useErrorContext } from '../../contexts/ErrorContext';
+import { TextMessages } from '../../contants/message_error';
 
 
 const initialPost: PostOnScreen = {
@@ -21,7 +22,8 @@ function AddPost({ setPosts: setPostsList }: AddPostProps) {
     console.log("Add post render")
 
     const { setPage } = useDialogContext()
-    const { setMessage } = useErrorContext()
+    const { setErrorMessage, setSuccessMessage } = useErrorContext()
+    const { createPostMessage } = TextMessages
 
 
     const [post, setPost] = useState<PostOnScreen>(initialPost)
@@ -47,23 +49,21 @@ function AddPost({ setPosts: setPostsList }: AddPostProps) {
 
 
     const handlePostSubmit = async () => {
-        debugger;
         if (!accessToken) return
         const errorMessage = validatePost(post)
         if (errorMessage) {
-            setMessage({ display: true, message: errorMessage, seveirity: "error" })
+            setErrorMessage(errorMessage)
             return
         }
 
         try {
-            const newPost = await createPost(post, accessToken)
+            const newPost = await createPostAPI(post, accessToken)
             setPostsList(postsList => [...postsList, newPost])
-            setMessage({ display: true, message: "Post has been added", seveirity: "success" })
+            setSuccessMessage(createPostMessage.success)
             setTimeout(() => setPage(DialogPage.None), 1000)
 
         } catch (err) {
-            setMessage({ display: true, message: "Post has been added", seveirity: "success" })
-            console.log(err)
+            setErrorMessage(createPostMessage.error)
         }
     }
 

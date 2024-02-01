@@ -68,25 +68,46 @@ export enum DialogPage {
     None = "NONE",
     Login = "LOGIN",
     Signup = "SIGNUP",
-    AddPost = "ADDPOST",
+    AddPost = "ADD_POST",
+    SpecificPost = "SPECIFIC_POST",
+    UserProfile = "USER_PROFILE"
 }
 
 type ErrorObject = { message: string;[key: string]: unknown };
 type ErrorType = string | ErrorObject;
 
-export type HttpResponse = {
-    timeStamp: string,
-    statusCode?: number,
-    status?: string,
-    message?: string,
-    data?: object,
-    errors: ErrorType[];
+// export type HttpResponse = {
+//     timeStamp: string,
+//     statusCode: number,
+//     status: string,
+//     message?: string,
+//     data: object,
+// } | { // error
+//     timeStamp: string,
+//     statusCode: number,
+//     status: string,
+//     errors: string[];
+// }
+
+export type HttpErrorResponse = {
+    response: {
+        data: {
+            timeStamp: string,
+            statusCode: number,
+            status: string,
+            errors: string[];
+        }
+    }
 }
 
-export type HttpError = {
-    response: Response
-}
-
-type Response = {
-    data: HttpResponse
+export type HttpSuccessResponse = {
+    response: {
+        data: {
+            timeStamp: string,
+            statusCode: number,
+            status: string,
+            message?: string,
+            data: object,
+        }
+    }
 }

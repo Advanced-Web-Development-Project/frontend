@@ -29,7 +29,8 @@ const Navbar: React.FC = () => {
   }
 
   const handleProfile = () => {
-    navigate('/profile')
+    setPage(DialogPage.UserProfile)
+    // navigate('/profile')
   }
 
   const handleLogout = () => {

@@ -11,49 +11,53 @@ import PostBoxTitle from '../post_box_title/post_box_title';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getPictureAPI } from '../../../api/picture_api';
+import { useSpecifcPostContext } from '../../../contexts/SpecificPostContext';
 
 
 interface PostBoxProps {
     post: Post
 }
+
+
 function PostBox({ post }: PostBoxProps) {
 
-    const { title, likes, username, createdAt, dislikes, postId, comments, imagePath } = post
-    // const [imagePath, setImagePath] = useState("")
-    const navigate = useNavigate();
+
+    const [postInBox, setPostInBox] = useState<Post | null>(post)
+    const { setPage } = useDialogContext()
+    const { setSpecificPost, specifcPost } = useSpecifcPostContext()
 
     useEffect(() => {
-        // loadPicture();
-    }, [])
+        if (!postInBox || !specifcPost) return
+        if (postInBox.postId !== specifcPost.postId) return
+        setPostInBox({ ...specifcPost })
+    }, [specifcPost])
 
-    const computedImagePath = `http://localhost:8000/${imagePath}`
+    useEffect(() => {
+        setPostInBox({ ...post })
+    }, [post])
 
-    if (!post) return <></>
+    if (!postInBox) return <></>
 
-    const postTimestep = timeAgo(createdAt.getTime())
+    const { title, likes, username, createdAt, dislikes, postId, comments, imagePath } = postInBox!
+
+    const postTimestep = timeAgo(new Date(createdAt).getTime())
     const info = `Posted by ${username} ${postTimestep}`
 
     const handlePostClicked = () => {
-        navigate('/post', { state: { post } });
+        setSpecificPost({ ...postInBox })
+        setPage(DialogPage.SpecificPost)
     }
 
-    // const loadPicture = async () => {
-    //     try {
-    //         const res = await getPictureAPI(post.imagePath)
-    //         console.log("resposen: ", res)
-    //     } catch (err) {
-    //         console.log("error: ", err)
-    //     }
 
-    // }
 
-    console.log("PATH : ", computedImagePath)
+    const computedImagePath = `http://localhost:8000/${imagePath}`
 
+    console.log("Post Box Render --- ", postInBox.title)
 
     return (
         <Card variant="outlined" className={styles.card} >
 
-            <PostLikeBox post={post}></PostLikeBox>
+            <PostLikeBox post={postInBox} setPost={setPostInBox}></PostLikeBox>
 
             <div className={styles.card__body} onClick={handlePostClicked}>
                 <img
