@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { User, UserOS } from '../models/general';
+import { server } from '.';
 
-export const server = axios.create({
-    baseURL: 'http://localhost:8000',
-});
 
 export const signupAPI = async (user: UserOS) => {
 
@@ -24,10 +22,9 @@ export const loginWithGoogleAPI = async () => {
     return response
 }
 
+export const refreshTokenAPI = async (): Promise<any> => {
+    const response = await server.post('/auth/login',);
+    return response
+}
 
-const clearCookies = () => {
-    document.cookie.split(';').forEach(cookie => {
-        const [name] = cookie.trim().split('=');
-        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-    });
-};
+

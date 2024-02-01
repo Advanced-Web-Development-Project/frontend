@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDialogContext } from '../../contexts/PageContext';
 import { DialogPage, HttpErrorResponse } from '../../models/general';
 import { useErrorContext } from '../../contexts/ErrorContext';
+import Cookies from 'js-cookie';
 
 interface LoginProps {
 }
@@ -26,7 +27,12 @@ function Login({ }: LoginProps) {
     const handleUserHasLoggedIn = (response: any) => {
 
         const accessToken = response.data.data.accessToken
+        const refreshToken = response.data.data.refreshToken
         const user = response.data.data.userInfo
+
+        // Store the tokens in Cookies or secure cookie for later use
+        Cookies.set('accessToken', accessToken);
+        Cookies.set('refreshToken', refreshToken);
 
         localStorage.setItem('userInfo', JSON.stringify({
             accessToken: accessToken,
@@ -54,7 +60,6 @@ function Login({ }: LoginProps) {
         try {
             const response = await loginWithGoogleAPI()
         } catch (err) {
-            console.log("@@@@@@@@@@@", err)
         }
     }
 

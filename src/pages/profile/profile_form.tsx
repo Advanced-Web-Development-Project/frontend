@@ -19,13 +19,10 @@ function ProfileForm({ screenEditable }: ProfileFormProps) {
 
     const [oldProfileFields, setOldProfileFields] = useState<ProfileFileds>(initialProfileFields)
     const [imageFile, setImageFile] = useState<File | null>(null)
-    const [selectedImageFileName, setSelctedImageFileName] = useState('')
 
     const { accessToken, user, setUser } = useAuth()
-    const { setSuccessMessage } = useErrorContext()
+    const { setSuccessMessage, setErrorMessage } = useErrorContext()
     const { updateUserMessage } = TextMessages
-
-    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -43,17 +40,19 @@ function ProfileForm({ screenEditable }: ProfileFormProps) {
 
             const updatedUser = getUpdatedFieldFromUser(oldProfileFields, values, imageFile);
 
-            if (Object.keys(updatedUser).length === 0 || !accessToken) return
+            if (!accessToken) return
+            if (Object.keys(updatedUser).length === 0) {
+                setErrorMessage('You forgot to update... :)')
+                return
+            }
 
             try {
-                // debugger;
                 const user: User = await updateUserAPI(oldProfileFields.username, accessToken, updatedUser)
                 setUser(user)
                 setSuccessMessage(updateUserMessage.success)
 
             } catch (error: any) {
-                const errorMessage = error.response.data.message
-                console.log(error)
+                setErrorMessage(updateUserMessage.error)
             }
         },
     })
@@ -65,12 +64,8 @@ function ProfileForm({ screenEditable }: ProfileFormProps) {
         if (files && files.length > 0) {
             const file = files[0];
             setImageFile(file);
-            setSelctedImageFileName(file.name)
         }
     };
-
-    console.log(values)
-
 
     return (
         <form onSubmit={handleSubmit}>

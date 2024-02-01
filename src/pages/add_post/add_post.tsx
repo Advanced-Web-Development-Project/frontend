@@ -19,8 +19,6 @@ interface AddPostProps {
 }
 function AddPost({ setPosts: setPostsList }: AddPostProps) {
 
-    console.log("Add post render")
-
     const { setPage } = useDialogContext()
     const { setErrorMessage, setSuccessMessage } = useErrorContext()
     const { createPostMessage } = TextMessages

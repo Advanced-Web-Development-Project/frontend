@@ -1,4 +1,4 @@
-import { server } from "./auth_api";
+import { server } from "./index";
 
 
 export const getPictureAPI = async (imagePath: string): Promise<any> => {

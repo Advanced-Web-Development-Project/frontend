@@ -5,7 +5,7 @@ export type User = {
     createdAt: Date,
     email: string,
     name: string,
-    posts: Post[],
+    posts: string[],
     provider: string,
     updatedAt: Date,
     username: string,
@@ -71,6 +71,13 @@ export enum DialogPage {
     AddPost = "ADD_POST",
     SpecificPost = "SPECIFIC_POST",
     UserProfile = "USER_PROFILE"
+}
+
+export enum PostCategory {
+    MyPosts = "my_posts",
+    Tech = "technology",
+    Sport = "sports",
+    Science = "science"
 }
 
 type ErrorObject = { message: string;[key: string]: unknown };

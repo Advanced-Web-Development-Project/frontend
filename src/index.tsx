@@ -9,6 +9,7 @@ import { ErrorProvider } from './contexts/ErrorContext';
 import { LoadingProvider } from './contexts/LoadingSpinnerContext';
 import { SearchTermProvider } from './contexts/SearchTermContext';
 import { SpecificPostProvider } from './contexts/SpecificPostContext';
+import { PostCategoryProvider } from './contexts/CategoryContext';
 
 
 const root = ReactDOM.createRoot(
@@ -23,7 +24,9 @@ root.render(
             <LoadingProvider>
               <SearchTermProvider>
                 <SpecificPostProvider>
-                  <App />
+                  <PostCategoryProvider>
+                    <App />
+                  </PostCategoryProvider>
                 </SpecificPostProvider>
               </SearchTermProvider>
             </LoadingProvider>

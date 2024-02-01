@@ -20,10 +20,6 @@ import useConfirmationDialog from "../../hooks/useConfirmationDialog";
 interface PostPageProps { }
 
 function PostPage({ }: PostPageProps) {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // const post: Post = location.state?.post
 
   const [text, setText] = useState("");
   const [showComments, setShowComments] = useState(true);
@@ -31,7 +27,7 @@ function PostPage({ }: PostPageProps) {
 
   const { open, handleClose, handleOpen } = useConfirmationDialog()
 
-  const { user: userLoggedIn, accessToken } = useAuth();
+  const { user: userLoggedIn, setUser, isLoggedIn, accessToken } = useAuth();
   const { setErrorMessage } = useErrorContext();
   const { specifcPost, setSpecificPost } = useSpecifcPostContext();
   const { setPage } = useDialogContext();
@@ -55,7 +51,6 @@ function PostPage({ }: PostPageProps) {
   const info = `Posted by ${username} ${postTimestep}`;
 
   const getComments = async () => {
-    console.log(specifcPost);
     const response: Comment[] = await getCommentsByPost(specifcPost.postId);
     setCurrComments(response);
   };
@@ -91,6 +86,7 @@ function PostPage({ }: PostPageProps) {
     handleClose();
     closePage();
   }
+  const isPostOwnedByUser = userLoggedIn && userLoggedIn.posts.find(postId => postId === specifcPost.postId) !== undefined
 
   const computedImagePath = `http://localhost:8000/${imagePath}`;
 
@@ -133,7 +129,7 @@ function PostPage({ }: PostPageProps) {
           <PostLikeComment
             {...{ type: "SHOW", handleShowComment, comments: currComments }}
           ></PostLikeComment>
-          <Button color="error" onClick={() => handleOpen()}>Delete Post</Button>
+          {isPostOwnedByUser && <Button color="error" onClick={() => handleOpen()}>Delete Post</Button>}
         </div>
 
         <div className={styles.comments_container}>

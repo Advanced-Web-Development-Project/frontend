@@ -1,19 +1,12 @@
 
 
 import { AxiosResponse } from "axios";
-import { Comment, CommentDB, Post, PostOnScreen } from "../models/general";
-import { server } from "./auth_api"
+import { Comment, CommentDB, Post, PostCategory, PostOnScreen } from "../models/general";
+import { server } from "./index"
 
 export const getAllPostsAPI = async (): Promise<Post[]> => {
     const response = await server.get('/posts');
     const posts = response.data.data
-    // const postsToSend = posts.map((post: Post) => {
-    //     return {
-    //         ...post,
-    //         createdAt: new Date(post.createdAt),
-    //         updatedAt: new Date(post.updatedAt)
-    //     } as Post
-    // })
     return posts
 }
 
@@ -72,17 +65,16 @@ export const getSpecificPostAPI = async (postId: string): Promise<Post> => {
 
 }
 
-export const getAllPostsByCategoryAPI = async (category: string): Promise<Post[]> => {
-    const response = await server.get(`/posts/category/${category}`);
-    const posts = response.data.data
-    const postsToSend = posts.map((post: Post) => {
-        return {
-            ...post,
-            createdAt: new Date(post.createdAt),
-            updatedAt: new Date(post.updatedAt)
-        } as Post
+export const getAllPostsByCategoryAPI = async (category: PostCategory): Promise<Post[]> => {
+
+    const response = (category === PostCategory.MyPosts) ?
+        await server.get('/posts') :
+        await server.get(`/posts/category/${category}`);
+
+    const posts: Post[] = response.data.data
+    return posts.sort((a, b) => {
+        return (new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     })
-    return postsToSend
 }
 
 export const deletePostAPI = async (postId: string, accessToken: string) => {

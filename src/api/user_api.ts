@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { User } from "../models/general";
-import { server } from "./auth_api"
+import { server } from "./index"
 import { ProfileFileds } from "../pages/profile/service";
 
 export const updateUserAPI = async (username: string, accessToken: string, user: Partial<ProfileFileds>): Promise<User> => {
