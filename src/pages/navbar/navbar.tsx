@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './index.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,12 +9,14 @@ import { Button, IconButton } from '@mui/material';
 import { useAuth } from '../../contexts/AuthContexts';
 import { useDialogContext } from '../../contexts/PageContext';
 import { DialogPage } from '../../models/general';
+import { useSearchTermContext } from '../../contexts/SearchTermContext';
 
 const Navbar: React.FC = () => {
 
   const { setPage } = useDialogContext()
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const { setSearchTerm } = useSearchTermContext()
+
   const { isLoggedIn, logout } = useAuth()
   const navigate = useNavigate()
 
@@ -27,7 +29,8 @@ const Navbar: React.FC = () => {
   }
 
   const handleProfile = () => {
-    navigate('/profile')
+    setPage(DialogPage.UserProfile)
+    // navigate('/profile')
   }
 
   const handleLogout = () => {
@@ -37,6 +40,11 @@ const Navbar: React.FC = () => {
 
   const handleHome = () => {
     navigate('/', { replace: true })
+  }
+
+  const handleSearchTermChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const searchText = event.target.value
+    setSearchTerm(searchText)
   }
 
 
@@ -63,8 +71,7 @@ const Navbar: React.FC = () => {
             className={styles.searchInput}
             type="text"
             placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchTermChange}
           />
         </div>
 

@@ -22,4 +22,12 @@ export const loginAPI = async (email: string, password: string): Promise<any> =>
 export const loginWithGoogleAPI = async () => {
     const response = await server.get('/auth/google');
     return response
-} 
+}
+
+
+const clearCookies = () => {
+    document.cookie.split(';').forEach(cookie => {
+        const [name] = cookie.trim().split('=');
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    });
+};

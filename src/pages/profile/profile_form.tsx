@@ -8,6 +8,8 @@ import { updateUserAPI } from '../../api/user_api';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import TextInputField from '../../gen_components/TextInputField';
+import { useErrorContext } from '../../contexts/ErrorContext';
+import { TextMessages } from '../../contants/message_error';
 
 interface ProfileFormProps {
     screenEditable: boolean
@@ -19,7 +21,9 @@ function ProfileForm({ screenEditable }: ProfileFormProps) {
     const [imageFile, setImageFile] = useState<File | null>(null)
     const [selectedImageFileName, setSelctedImageFileName] = useState('')
 
-    const { accessToken, user, logout } = useAuth()
+    const { accessToken, user, setUser } = useAuth()
+    const { setSuccessMessage } = useErrorContext()
+    const { updateUserMessage } = TextMessages
 
     const navigate = useNavigate();
 
@@ -27,7 +31,7 @@ function ProfileForm({ screenEditable }: ProfileFormProps) {
 
         if (!user) return
 
-        const { email, name, username, avatar } = user
+        const { email, name, username } = user
         setOldProfileFields({ email, name, username, avatar: null })
     }, [])
 
@@ -42,9 +46,10 @@ function ProfileForm({ screenEditable }: ProfileFormProps) {
             if (Object.keys(updatedUser).length === 0 || !accessToken) return
 
             try {
-
-                const response: any = await updateUserAPI(oldProfileFields.username, accessToken, updatedUser)
-                console.log("USER : ", response)
+                // debugger;
+                const user: User = await updateUserAPI(oldProfileFields.username, accessToken, updatedUser)
+                setUser(user)
+                setSuccessMessage(updateUserMessage.success)
 
             } catch (error: any) {
                 const errorMessage = error.response.data.message

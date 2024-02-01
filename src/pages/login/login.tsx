@@ -5,12 +5,8 @@ import { loginAPI, loginWithGoogleAPI } from '../../api/auth_api';
 import { useAuth } from '../../contexts/AuthContexts';
 import { useNavigate } from 'react-router-dom';
 import { useDialogContext } from '../../contexts/PageContext';
-import { DialogPage } from '../../models/general';
+import { DialogPage, HttpErrorResponse } from '../../models/general';
 import { useErrorContext } from '../../contexts/ErrorContext';
-import LoginGoogleButton from './login_google_button';
-
-import { gapi } from 'gapi-script'
-const clientId = '513720972218-dgg768kvulrpei4ravkmk5q8pbmkt2k3.apps.googleusercontent.com'
 
 interface LoginProps {
 }
@@ -18,15 +14,6 @@ interface LoginProps {
 
 function Login({ }: LoginProps) {
 
-    useEffect(() => {
-        function start() {
-            gapi.client.init({
-                clientId: clientId,
-                scope: ""
-            })
-        }
-        gapi.load('client:auth2', start)
-    })
 
     const { login } = useAuth();
 
@@ -34,7 +21,7 @@ function Login({ }: LoginProps) {
     const [password, setPassword] = useState('')
 
     const { setPage } = useDialogContext()
-    const { setMessage } = useErrorContext()
+    const { setErrorMessage } = useErrorContext()
 
     const handleUserHasLoggedIn = (response: any) => {
 
@@ -56,29 +43,18 @@ function Login({ }: LoginProps) {
         try {
             const response = await loginAPI(email, password);
             handleUserHasLoggedIn(response)
-            // const accessToken = response.data.data.accessToken
-            // const user = response.data.data.userInfo
 
-            // localStorage.setItem('userInfo', JSON.stringify({
-            //     accessToken: accessToken,
-            //     user: user
-            // }));
-
-            // login(accessToken, user)
-            // setPage(DialogPage.None)
-
-        } catch (error: any) {
-            console.log(error)
+        } catch (err: any) {
+            const error: HttpErrorResponse = err
+            setErrorMessage(error.response.data.errors[0])
         }
     }
 
     const handleGoogleLogin = async () => {
         try {
             const response = await loginWithGoogleAPI()
-            // handleUserHasLoggedIn(response)
-            console.log(response)
         } catch (err) {
-            console.log(err)
+            console.log("@@@@@@@@@@@", err)
         }
     }
 
@@ -93,9 +69,7 @@ function Login({ }: LoginProps) {
 
                     <div>By continuing, you agree to our User Agreement and<br /> acknowledge that you understand the Privacy Policy.</div>
 
-                    {/* <Button variant='outlined' href='http://localhost:8000/auth/google/' onClick={handleGoogleLogin}>Contine With Google</Button> */}
-                    {/* <Button variant='outlined' href='http://localhost:8000/auth/google/' >Contine With Google</Button> */}
-                    <LoginGoogleButton></LoginGoogleButton>
+                    <Button variant='outlined' href='http://localhost:8000/auth/google' onClick={handleGoogleLogin}>Contine With Google</Button>
 
                     <div className={styles.orContainer}>
                         <div className={styles.orContainer__line}></div>

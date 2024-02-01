@@ -7,6 +7,8 @@ import { AuthProvider } from './contexts/AuthContexts';
 import { DialogProvider } from './contexts/PageContext';
 import { ErrorProvider } from './contexts/ErrorContext';
 import { LoadingProvider } from './contexts/LoadingSpinnerContext';
+import { SearchTermProvider } from './contexts/SearchTermContext';
+import { SpecificPostProvider } from './contexts/SpecificPostContext';
 
 
 const root = ReactDOM.createRoot(
@@ -19,7 +21,11 @@ root.render(
         <DialogProvider>
           <ErrorProvider>
             <LoadingProvider>
-              <App />
+              <SearchTermProvider>
+                <SpecificPostProvider>
+                  <App />
+                </SpecificPostProvider>
+              </SearchTermProvider>
             </LoadingProvider>
           </ErrorProvider>
         </DialogProvider>

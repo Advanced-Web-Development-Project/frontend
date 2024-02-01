@@ -9,6 +9,7 @@ import SignupPage from './../../pages/signup/signup'
 import ProfilePage from './../../pages/profile/profile'
 import AddPost from './../../pages/add_post/add_post'
 import ShowPostPage from "../../pages/specific_post/post_page"
+import PostPage from '../../pages/specific_post/post_page';
 
 interface DialogConatinerProps {
     children?: ReactNode,
@@ -27,6 +28,7 @@ const DialogConatiner: React.FC<DialogConatinerProps> = ({ children, setPosts }:
     const toOpen = page !== DialogPage.None
 
     const selectPage = (page: DialogPage) => {
+
         switch (page) {
             case DialogPage.Login:
                 return <LoginPage />
@@ -34,13 +36,21 @@ const DialogConatiner: React.FC<DialogConatinerProps> = ({ children, setPosts }:
                 return <SignupPage />
             case DialogPage.AddPost:
                 return <AddPost setPosts={setPosts} />
+            case DialogPage.SpecificPost:
+                return <PostPage />
+            case DialogPage.UserProfile:
+                return <ProfilePage />
             case DialogPage.None:
                 return <></>
         }
     }
 
-    return (
+    const check = () => {
+        const val = 3
+        const check2= 2;
+    }
 
+    return (
         <>
             <Dialog className={styles.container} open={toOpen} onClose={handleClose} maxWidth="md">
                 {selectPage(page)}

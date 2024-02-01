@@ -21,6 +21,16 @@ export const deleteUserAPI = async (userId: string, accessToken: string): Promis
             'Content-Type': 'application/json'
         }
     });
-    const deletedUser = response.data.data
-    return deletedUser
+    return response.data
+}
+
+
+export const getUserInfoAPI = async (accessToken: string) => {
+    const response = await server.get('/users/me', {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return response.data
 }

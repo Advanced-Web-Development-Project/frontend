@@ -9,23 +9,27 @@ import { UserStorageInfo } from './models/general';
 import PostPage from './pages/specific_post/post_page';
 import MessageBox from './gen_components/MessageBox/MessageBox';
 import { getPictureAPI } from './api/picture_api';
+import Cookies from 'js-cookie';
+import { getUserInfoAPI } from './api/user_api';
 
 
 function App() {
 
   const { login } = useAuth()
 
-  const initializeAuth = () => {
+  const initializeAuth = async () => {
 
-    const userStorage = localStorage.getItem('userInfo')
-    if (!userStorage) return
+    const accessToken = Cookies.get('accessToken')!;
+    if (!accessToken) return
 
-    const userInfo: UserStorageInfo = JSON.parse(userStorage);
-
-    if (userInfo) {
-      login(userInfo.accessToken, userInfo.user)
+    try {
+      const loggedUser = await getUserInfoAPI(accessToken)
+      login(accessToken, loggedUser.data)
+    } catch (err) {
+      console.log(err)
     }
   };
+
   const loadPicture = async () => {
     try {
       const res = await getPictureAPI('images/default/default-post-image.png')

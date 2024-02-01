@@ -6,47 +6,35 @@ import { Post } from "../../../models/general"
 import PostBox from "../post_box/post_box"
 import { useLoading } from "../../../contexts/LoadingSpinnerContext"
 import { useErrorContext } from "../../../contexts/ErrorContext"
+import { useSearchTermContext } from "../../../contexts/SearchTermContext"
 
 interface PostListProps {
     posts: Post[],
+    originalPosts: Post[],
     setPosts: React.Dispatch<React.SetStateAction<Post[]>>,
     setOriginalPosts: React.Dispatch<React.SetStateAction<Post[]>>,
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function PostList({ setPosts, posts, setOriginalPosts, setLoading }: PostListProps) {
+function PostList({ setPosts, posts, setOriginalPosts, originalPosts, setLoading }: PostListProps) {
 
-    const { setMessage } = useErrorContext()
-
-
-
-    const fetchData = async () => {
-
-        setTimeout(async () => {
-            // setLoading(true)
-            const postsData = await getAllPostsAPI()
-            setPosts(postsData)
-            setOriginalPosts(postsData)
-            setLoading(false)
-        }, 0)
-    }
+    const { searchTerm } = useSearchTermContext()
 
     useEffect(() => {
-        try {
-            // setLoading(true)
-            fetchData();
-        } catch (error) {
-            console.log(error)
-        }
-    }, [])
+        const filteredPosts = searchTerm === "" ? originalPosts : originalPosts.filter(post => post.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
+        setPosts(filteredPosts)
+    }, [searchTerm])
 
     if (posts.length === 0) {
-        // setMessage({ message: 'No Post availbale to this category', display: true, seveirity: 'info' })
-        return <></>
+        return <div className={styles.no_posts_container}>
+            <h1 className={styles.no_posts_message}>No Posts... Please Try Another Category</h1>
+        </div>
     }
 
+    console.log(posts)
     return (
         <>
+            { }
             <div className={styles.container}>
                 {posts.map(post => <PostBox post={post}></PostBox>)}
             </div>
