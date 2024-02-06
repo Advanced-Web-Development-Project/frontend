@@ -26,7 +26,7 @@ function SignUp() {
                 const userInfo = response.data.userInfo
 
                 login(accessToken, userInfo)
-                setPage(DialogPage.None)
+                setPage(DialogPage.Login)
             } catch (error: any) {
                 const errorMessage = error.response.data.errors[0]
                 setErrorMessage(errorMessage)

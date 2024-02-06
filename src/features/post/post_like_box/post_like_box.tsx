@@ -26,7 +26,7 @@ function PostLikeBox({ post, style, setPost }: PostLikeBoxProps) {
 
     const { likes, dislikes, postId } = post!
 
-    const { user, accessToken } = useAuth()
+    const { user } = useAuth()
     const { setErrorMessage } = useErrorContext()
     const { likePostMessage } = TextMessages
 
@@ -48,7 +48,7 @@ function PostLikeBox({ post, style, setPost }: PostLikeBoxProps) {
         if (!user) return
 
         try {
-            const post = await likePostAPI(postId, accessToken!)
+            const post = await likePostAPI(postId)
             const { likes, dislikes } = post.data
             setPost((prev) => {
                 return {
@@ -66,7 +66,7 @@ function PostLikeBox({ post, style, setPost }: PostLikeBoxProps) {
         if (!user) return
 
         try {
-            const post = await dislikePostAPI(postId, accessToken!)
+            const post = await dislikePostAPI(postId)
             const { likes, dislikes } = post.data
             setPost((prev) => {
                 return {

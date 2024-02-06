@@ -16,14 +16,12 @@ import { useSpecifcPostContext } from "../../contexts/SpecificPostContext";
 import { useDialogContext } from "../../contexts/PageContext";
 import ConfirmationDialog from "./delete_post_alert";
 import useConfirmationDialog from "../../hooks/useConfirmationDialog";
+import EditPostDialog from "./edit_post_dialog";
+import EditPostButton from "./EditPostButton";
 
 interface PostPageProps { }
 
 function PostPage({ }: PostPageProps) {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // const post: Post = location.state?.post
 
   const [text, setText] = useState("");
   const [showComments, setShowComments] = useState(true);
@@ -31,7 +29,7 @@ function PostPage({ }: PostPageProps) {
 
   const { open, handleClose, handleOpen } = useConfirmationDialog()
 
-  const { user: userLoggedIn, accessToken } = useAuth();
+  const { user: userLoggedIn } = useAuth();
   const { setErrorMessage } = useErrorContext();
   const { specifcPost, setSpecificPost } = useSpecifcPostContext();
   const { setPage } = useDialogContext();
@@ -55,7 +53,6 @@ function PostPage({ }: PostPageProps) {
   const info = `Posted by ${username} ${postTimestep}`;
 
   const getComments = async () => {
-    console.log(specifcPost);
     const response: Comment[] = await getCommentsByPost(specifcPost.postId);
     setCurrComments(response);
   };
@@ -65,18 +62,19 @@ function PostPage({ }: PostPageProps) {
   };
 
   const handleCommentClicked = async () => {
-    if (!accessToken || !userLoggedIn) {
+    if (!userLoggedIn) {
       setErrorMessage("You have to log in to comment on a post");
       return;
     }
 
     try {
-      const comment: CommentDB = await createComment(postId, accessToken, {
+      const comment: CommentDB = await createComment(postId, {
         content: text,
         username: userLoggedIn.username,
       });
       setCurrComments([...currComments, comment]);
       setShowComments(true);
+      setText("")
     } catch (error) {
       console.log(error);
     }
@@ -91,14 +89,16 @@ function PostPage({ }: PostPageProps) {
     handleClose();
     closePage();
   }
+  const isPostOwnedByUser = userLoggedIn && userLoggedIn.posts.find(postId => postId === specifcPost.postId) !== undefined
 
-  const computedImagePath = `http://localhost:8000/${imagePath}`;
+  const computedImagePath = `${process.env.REACT_APP_SERVER_URL_DEV}/${imagePath}`;
 
   return (
     <>
       <div className={styles.container}>
 
-        <ConfirmationDialog message="check" postId={postId} open={open} onAccept={onAcceptToDeletePost} onCancel={handleClose} />
+        <ConfirmationDialog message="Post is being deleted.." postId={postId} open={open} onAccept={onAcceptToDeletePost} onCancel={handleClose} />
+        <EditPostDialog post={specifcPost}></EditPostDialog>
 
         <div className={styles.headline}>
           <div className={styles.left_header}>
@@ -133,7 +133,11 @@ function PostPage({ }: PostPageProps) {
           <PostLikeComment
             {...{ type: "SHOW", handleShowComment, comments: currComments }}
           ></PostLikeComment>
-          <Button color="error" onClick={() => handleOpen()}>Delete Post</Button>
+          {isPostOwnedByUser && <div>
+            <EditPostButton />
+            <Button color="error" onClick={() => handleOpen()}>Delete Post</Button>
+          </div>
+          }
         </div>
 
         <div className={styles.comments_container}>
@@ -169,11 +173,15 @@ function PostPage({ }: PostPageProps) {
           <Button
             variant="contained"
             size="small"
+            color="warning"
             onClick={handleCommentClicked}
           >
             Comment
           </Button>
         </div>
+
+
+
       </div>
     </>
   );

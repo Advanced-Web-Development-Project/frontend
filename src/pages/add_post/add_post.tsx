@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import styles from './index.module.css'
 import { useDialogContext } from '../../contexts/PageContext';
 import { Button, TextField } from '@mui/material';
-import { DialogPage, Post, PostOnScreen } from '../../models/general';
+import { DialogPage, Post, PostOnScreen, User } from '../../models/general';
 import { createPostAPI } from '../../api/post_api';
 import { useAuth } from '../../contexts/AuthContexts';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import { TextMessages } from '../../contants/message_error';
+import { useSpecifcPostContext } from '../../contexts/SpecificPostContext';
 
 
 const initialPost: PostOnScreen = {
@@ -19,16 +20,12 @@ interface AddPostProps {
 }
 function AddPost({ setPosts: setPostsList }: AddPostProps) {
 
-    console.log("Add post render")
-
     const { setPage } = useDialogContext()
+    const { setUser, user } = useAuth()
     const { setErrorMessage, setSuccessMessage } = useErrorContext()
     const { createPostMessage } = TextMessages
-
-
+    const { setSpecificPost } = useSpecifcPostContext()
     const [post, setPost] = useState<PostOnScreen>(initialPost)
-
-    const { accessToken } = useAuth()
 
     const handlePostChange = (prop: keyof PostOnScreen, value: string) => {
         setPost({ ...post, [prop]: value })
@@ -49,7 +46,6 @@ function AddPost({ setPosts: setPostsList }: AddPostProps) {
 
 
     const handlePostSubmit = async () => {
-        if (!accessToken) return
         const errorMessage = validatePost(post)
         if (errorMessage) {
             setErrorMessage(errorMessage)
@@ -57,15 +53,25 @@ function AddPost({ setPosts: setPostsList }: AddPostProps) {
         }
 
         try {
-            const newPost = await createPostAPI(post, accessToken)
+
+            const newPost = await createPostAPI(post)
             setPostsList(postsList => [...postsList, newPost])
+            setSpecificPost(newPost)
             setSuccessMessage(createPostMessage.success)
-            setTimeout(() => setPage(DialogPage.None), 1000)
+            setUser((user) => {
+                return {
+                    ...user!,
+                    posts: [...user!.posts, newPost.postId]
+                }
+            })
+            setTimeout(() => setPage(DialogPage.SpecificPost), 1000)
 
         } catch (err) {
             setErrorMessage(createPostMessage.error)
         }
     }
+
+    // if (!user) return <></>
 
     return (
         <>

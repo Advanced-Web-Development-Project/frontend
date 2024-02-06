@@ -21,3 +21,16 @@ body {
     background-color: rgb(212, 220, 241);
     /* padding-top: 30px; */
 }
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(151, 151, 151);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(177, 167, 167);
+    border-radius: 20px;
+}

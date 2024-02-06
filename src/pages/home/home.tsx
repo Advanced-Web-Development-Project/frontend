@@ -2,13 +2,15 @@ import styles from './index.module.css'
 import DialogConatiner from '../../features/DialogContainer/DialogContainer';
 import PostList from '../../features/post/post_list/post_list';
 import AddPostInput from '../../features/post/post_add_input/post_add_input'
-import { DialogPage, Post } from '../../models/general';
+import { DialogPage, Post, PostCategory } from '../../models/general';
 import { useEffect, useState } from 'react';
 import SearchBar from '../../features/searchBar/SearchBar';
 import LoadingSpinner from '../../gen_components/LoadingSpinner';
-import { getAllPostsAPI } from '../../api/post_api';
+import { getAllPostsAPI, getAllPostsByCategoryAPI } from '../../api/post_api';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import { useDialogContext } from '../../contexts/PageContext';
+import { usePostCategoryContext } from '../../contexts/CategoryContext';
+import { useAuth } from '../../contexts/AuthContexts';
 
 
 
@@ -19,11 +21,20 @@ function Home() {
     const [loading, setLoading] = useState(false)
     const { page } = useDialogContext()
 
+    const { category } = usePostCategoryContext()
+    const { user } = useAuth()
+
     const fetchData = async () => {
         try {
-            const postsData = await getAllPostsAPI()
-            setPosts(postsData)
-            setOriginalPosts(postsData)
+            let posts = []
+            if (category === PostCategory.AllPosts && user) {
+                posts = await getAllPostsByCategoryAPI(PostCategory.MyPosts)
+                posts = posts.filter(post => post.username === user.username)
+            } else {
+                posts = await getAllPostsByCategoryAPI(category)
+            }
+            setPosts(posts)
+            setOriginalPosts(posts)
             setLoading(false)
         } catch (err) {
             setLoading(false)
@@ -31,11 +42,10 @@ function Home() {
         }
     }
 
-    // useEffect(() => {
-    //     debugger;
-    //     if (page === DialogPage.None)
-    //         fetchData();
-    // }, [page])
+    useEffect(() => {
+        if (page === DialogPage.None)
+            fetchData();
+    }, [page])
 
     useEffect(() => {
         try {

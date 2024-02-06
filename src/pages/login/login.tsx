@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDialogContext } from '../../contexts/PageContext';
 import { DialogPage, HttpErrorResponse } from '../../models/general';
 import { useErrorContext } from '../../contexts/ErrorContext';
+import Cookies from 'js-cookie';
 
 interface LoginProps {
 }
@@ -26,14 +27,19 @@ function Login({ }: LoginProps) {
     const handleUserHasLoggedIn = (response: any) => {
 
         const accessToken = response.data.data.accessToken
+        const refreshToken = response.data.data.refreshToken
         const user = response.data.data.userInfo
+
+        // Store the tokens in Cookies or secure cookie for later use
+        Cookies.set('accessToken', accessToken);
+        Cookies.set('refreshToken', refreshToken);
 
         localStorage.setItem('userInfo', JSON.stringify({
             accessToken: accessToken,
             user: user
         }));
 
-        login(accessToken, user)
+        login(user)
         setPage(DialogPage.None)
     }
 
@@ -54,9 +60,10 @@ function Login({ }: LoginProps) {
         try {
             const response = await loginWithGoogleAPI()
         } catch (err) {
-            console.log("@@@@@@@@@@@", err)
         }
     }
+
+    const computedImagePath = `${process.env.REACT_APP_SERVER_URL_DEV}/auth/google`
 
 
     return (
@@ -69,7 +76,7 @@ function Login({ }: LoginProps) {
 
                     <div>By continuing, you agree to our User Agreement and<br /> acknowledge that you understand the Privacy Policy.</div>
 
-                    <Button variant='outlined' href='http://localhost:8000/auth/google' onClick={handleGoogleLogin}>Contine With Google</Button>
+                    <Button variant='outlined' href={computedImagePath} onClick={handleGoogleLogin}>Contine With Google</Button>
 
                     <div className={styles.orContainer}>
                         <div className={styles.orContainer__line}></div>
@@ -103,7 +110,7 @@ function Login({ }: LoginProps) {
 
                     <Button variant='contained' onClick={handleLogin} color='info'>Log In</Button>
                 </div>
-            </div>
+            </div >
         </>
     );
 }

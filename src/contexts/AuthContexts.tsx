@@ -2,47 +2,45 @@
 // AuthContext.js
 import { createContext, useContext, useState } from 'react';
 import { User } from '../models/general';
+import Cookies from 'js-cookie';
 
 type AuthContextType = {
-  accessToken: string | null,
   user: User | null,
   isLoggedIn: boolean,
-  login: (token: string, user: User) => void,
+  login: (user: User) => void,
   logout: () => void,
   setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
 const initialAuthContext: AuthContextType = {
-  accessToken: null,
   user: null,
   isLoggedIn: false,
-  login: (token: string, user: User) => { },
+  login: (user: User) => { },
   logout: () => { },
-  setUser: () => {}
+  setUser: () => { }
 }
 
 const AuthContext = createContext(initialAuthContext);
 
 export const AuthProvider = ({ children }: any) => {
 
-  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
-  const login = (token: string, user: User) => {
-    setAccessToken(token);
+  const login = (user: User) => {
     setUser(user)
   };
 
   const isLoggedIn = user !== null
 
   const logout = () => {
-    setAccessToken(null);
     setUser(null)
     localStorage.removeItem('userInfo');
+    Cookies.remove('accessToken');
+    Cookies.remove('refreshToken');
   };
 
   return (
-    <AuthContext.Provider value={{ accessToken, user, login, logout, isLoggedIn, setUser }}>
+    <AuthContext.Provider value={{ user, login, logout, isLoggedIn, setUser }}>
       {children}
     </AuthContext.Provider>
   );

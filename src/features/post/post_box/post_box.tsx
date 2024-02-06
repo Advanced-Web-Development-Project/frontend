@@ -47,12 +47,7 @@ function PostBox({ post }: PostBoxProps) {
         setSpecificPost({ ...postInBox })
         setPage(DialogPage.SpecificPost)
     }
-
-
-
-    const computedImagePath = `http://localhost:8000/${imagePath}`
-
-    console.log("Post Box Render --- ", postInBox.title)
+    const computedImagePath = `${process.env.REACT_APP_SERVER_URL_DEV}/${imagePath}`
 
     return (
         <Card variant="outlined" className={styles.card} >

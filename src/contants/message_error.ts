@@ -7,7 +7,11 @@ export const TextMessages = {
     },
     createPostMessage: {
         error: 'Error while creating post...',
-        success: 'Post deatils updaed successfully'
+        success: 'Post created successfully'
+    },
+    editPostMessage: {
+        error: 'Error while updating post...',
+        success: 'Post updated successfully'
     },
     likePostMessage: {
         error: 'Error while liking post...',
@@ -16,5 +20,8 @@ export const TextMessages = {
         error: 'Error, Post was not deleted',
         warning: 'Post is being deleted... wait a moment',
         success: 'Post deleted successfully',
+    },
+    editCommentMessage: {
+        validateCommentChange: 'Change the comment content if you want to save :)'
     }
 };

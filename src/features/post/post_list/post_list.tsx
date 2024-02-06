@@ -31,7 +31,6 @@ function PostList({ setPosts, posts, setOriginalPosts, originalPosts, setLoading
         </div>
     }
 
-    console.log(posts)
     return (
         <>
             { }
