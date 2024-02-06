@@ -2,16 +2,18 @@ import axios from "axios";
 import axiosInterceptors from 'axios-interceptors';
 import Cookies from "js-cookie";
 
+const serverUrl = process.env.REACT_APP_SERVER_URL_DEV;
+
 export const server = axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: serverUrl,
 });
 
 
 // Add a request interceptor
 server.interceptors.request.use(
     (config) => {
-        debugger;
         const token = Cookies.get('accessToken');
+        console.log("TOKEN: ", token)
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -24,7 +26,6 @@ server.interceptors.request.use(
 server.interceptors.response.use(
     (response) => response,
     async (error) => {
-        debugger;
         const originalRequest = error.config;
 
         // If the error status is 401 and there is no originalRequest._retry flag,
@@ -34,17 +35,18 @@ server.interceptors.response.use(
 
             try {
                 const refreshToken = Cookies.get('refreshToken');
-                const response = await axios.post('/auth/refresh-token', { refreshToken });
-                const { token } = response.data;
+                const response = await server.post('/auth/refresh-token', { refreshToken });
+                const { accessToken, refreshToken: newRefreshToken } = response.data.data;
 
-                Cookies.set('accessToken', token);
+                Cookies.set('accessToken', accessToken);
+                Cookies.set('refreshToken', newRefreshToken);
 
                 // Retry the original request with the new token
-                originalRequest.headers.Authorization = `Bearer ${token}`;
+                originalRequest.headers.Authorization = `Bearer ${accessToken}`;
                 return axios(originalRequest);
             } catch (error) {
                 // Handle refresh token error or redirect to login
-                throw error
+                console.log(error)
             }
         }
 

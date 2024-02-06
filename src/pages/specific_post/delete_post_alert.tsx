@@ -29,17 +29,13 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 }) => {
 
   const { deletePostMessage } = TextMessages
-  const { accessToken } = useAuth()
-  const navigate = useNavigate()
   const { setErrorMessage, setSuccessMessage, setWarningMessage } = useErrorContext()
 
   const handleAccept = async () => {
-    // debugger;
-    if (!accessToken) return
     // delete post
     try {
       setWarningMessage(deletePostMessage.warning)
-      const response = await deletePostAPI(postId, accessToken)
+      const response = await deletePostAPI(postId)
       setTimeout(() => {
         setSuccessMessage(deletePostMessage.success)
         onAccept();
@@ -53,16 +49,16 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 
 
   return (
-    <Dialog open={open} onClose={onCancel}>
-      <DialogTitle>Confirmation</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{message}</DialogContentText>
-      </DialogContent>
+    <Dialog open={open} onClose={onCancel} >
+      <div style={{ padding: 50 }}>
+        <h1>{ }</h1>
+        <h4 style={{ fontSize: 20, color: "grey" }}>Are you sure?</h4>
+      </div>
       <DialogActions>
         <Button onClick={handleAccept} color="primary">
           Accept
         </Button>
-        <Button onClick={onCancel} color="secondary">
+        <Button onClick={onCancel} color="error">
           Cancel
         </Button>
       </DialogActions>

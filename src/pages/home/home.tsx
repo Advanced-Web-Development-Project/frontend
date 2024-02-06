@@ -10,6 +10,7 @@ import { getAllPostsAPI, getAllPostsByCategoryAPI } from '../../api/post_api';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import { useDialogContext } from '../../contexts/PageContext';
 import { usePostCategoryContext } from '../../contexts/CategoryContext';
+import { useAuth } from '../../contexts/AuthContexts';
 
 
 
@@ -21,12 +22,19 @@ function Home() {
     const { page } = useDialogContext()
 
     const { category } = usePostCategoryContext()
+    const { user } = useAuth()
 
     const fetchData = async () => {
         try {
-            const postsData = await getAllPostsByCategoryAPI(category)
-            setPosts(postsData)
-            setOriginalPosts(postsData)
+            let posts = []
+            if (category === PostCategory.AllPosts && user) {
+                posts = await getAllPostsByCategoryAPI(PostCategory.MyPosts)
+                posts = posts.filter(post => post.username === user.username)
+            } else {
+                posts = await getAllPostsByCategoryAPI(category)
+            }
+            setPosts(posts)
+            setOriginalPosts(posts)
             setLoading(false)
         } catch (err) {
             setLoading(false)

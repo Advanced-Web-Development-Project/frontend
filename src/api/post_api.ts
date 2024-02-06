@@ -11,47 +11,33 @@ export const getAllPostsAPI = async (): Promise<Post[]> => {
 }
 
 
-export const likePostAPI = async (postId: string, accessToken: string) => {
+export const likePostAPI = async (postId: string) => {
 
-    const response = await server.patch(`/posts/${postId}/like`, {}, {
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-        }
-    });
+    const response = await server.patch(`/posts/${postId}/like`);
 
     return response.data
 }
 
-export const dislikePostAPI = async (postId: string, accessToken: string) => {
+export const dislikePostAPI = async (postId: string) => {
 
 
-    const response = await server.patch(`/posts/${postId}/dislike`, {}, {
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-        }
-    });
+    const response = await server.patch(`/posts/${postId}/dislike`);
 
     return response.data
 }
 
-export const createPostAPI = async (post: PostOnScreen, accessToken: string): Promise<any> => {
+export const createPostAPI = async (post: PostOnScreen): Promise<Post> => {
 
-    const response = await server.post(`/posts/`, post, {
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'multipart/form-data'
-        }
-    })
+    const response = await server.post(`/posts/`, post)
     const postResult: Post = response.data.data
+    return postResult
+}
 
-    return {
-        ...postResult,
-        createdAt: new Date(postResult.createdAt),
-        updatedAt: new Date(postResult.updatedAt)
-    } as Post
+export const editPostAPI = async (postId: string, post: PostOnScreen): Promise<Post> => {
 
+    const response = await server.put(`/posts/${postId}`, post)
+    const postResult: Post = response.data.data
+    return postResult
 }
 
 export const getSpecificPostAPI = async (postId: string): Promise<Post> => {
@@ -67,9 +53,7 @@ export const getSpecificPostAPI = async (postId: string): Promise<Post> => {
 
 export const getAllPostsByCategoryAPI = async (category: PostCategory): Promise<Post[]> => {
 
-    const response = (category === PostCategory.MyPosts) ?
-        await server.get('/posts') :
-        await server.get(`/posts/category/${category}`);
+    const response = await server.get(`/posts/category/${category}`);
 
     const posts: Post[] = response.data.data
     return posts.sort((a, b) => {
@@ -77,16 +61,21 @@ export const getAllPostsByCategoryAPI = async (category: PostCategory): Promise<
     })
 }
 
-export const deletePostAPI = async (postId: string, accessToken: string) => {
+export const deletePostAPI = async (postId: string) => {
 
-    const response = await server.delete(`/posts/${postId}`, {
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-        }
-    });
+    const response = await server.delete(`/posts/${postId}`);
 
     return response.data
+}
+
+export const refreshAllPostsByCategoryAPI = async (category: PostCategory): Promise<Post[]> => {
+
+    const response = await server.get(`/posts/category/${category}/refresh`);
+
+    const posts: Post[] = response.data.data
+    return posts.sort((a, b) => {
+        return (new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    })
 }
 
 

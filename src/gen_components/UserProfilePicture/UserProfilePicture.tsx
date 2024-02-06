@@ -12,7 +12,7 @@ interface UserProfilePictureProps {
 
 const UserProfilePicture: React.FC<UserProfilePictureProps> = ({ src, alt, size = 'medium', children, avatar }: UserProfilePictureProps) => {
 
-    const computedImagePath = `http://localhost:8000/${avatar}`
+    const computedImagePath = `${process.env.REACT_APP_SERVER_URL_DEV}/${avatar}`
 
     return (
         <Avatar alt={alt} src={computedImagePath} className={styles.avatar} sizes={size}>

@@ -39,7 +39,7 @@ function Login({ }: LoginProps) {
             user: user
         }));
 
-        login(accessToken, user)
+        login(user)
         setPage(DialogPage.None)
     }
 
@@ -63,6 +63,8 @@ function Login({ }: LoginProps) {
         }
     }
 
+    const computedImagePath = `${process.env.REACT_APP_SERVER_URL_DEV}/auth/google`
+
 
     return (
         <>
@@ -74,7 +76,7 @@ function Login({ }: LoginProps) {
 
                     <div>By continuing, you agree to our User Agreement and<br /> acknowledge that you understand the Privacy Policy.</div>
 
-                    <Button variant='outlined' href='http://localhost:8000/auth/google' onClick={handleGoogleLogin}>Contine With Google</Button>
+                    <Button variant='outlined' href={computedImagePath} onClick={handleGoogleLogin}>Contine With Google</Button>
 
                     <div className={styles.orContainer}>
                         <div className={styles.orContainer__line}></div>
@@ -108,7 +110,7 @@ function Login({ }: LoginProps) {
 
                     <Button variant='contained' onClick={handleLogin} color='info'>Log In</Button>
                 </div>
-            </div>
+            </div >
         </>
     );
 }

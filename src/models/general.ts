@@ -74,10 +74,11 @@ export enum DialogPage {
 }
 
 export enum PostCategory {
-    MyPosts = "my_posts",
+    MyPosts = "general",
     Tech = "technology",
     Sport = "sports",
-    Science = "science"
+    Science = "science",
+    AllPosts = "all_posts"
 }
 
 type ErrorObject = { message: string;[key: string]: unknown };

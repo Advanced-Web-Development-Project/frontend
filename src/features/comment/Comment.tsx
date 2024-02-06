@@ -6,6 +6,7 @@ import { Delete, Edit, Save } from '@mui/icons-material/';
 import { useAuth } from '../../contexts/AuthContexts';
 import { deleteComment, editComment } from '../../api/commnet_api';
 import { useErrorContext } from '../../contexts/ErrorContext';
+import { TextMessages } from '../../contants/message_error';
 
 interface CommentProps {
     comment: Comment,
@@ -18,19 +19,19 @@ export default function UserComment({ comment, setCurrComments, currComments, po
 
     const { username, content, commentId } = comment
 
-    const { user, accessToken } = useAuth()
+    const { user } = useAuth()
     const { setErrorMessage, setSuccessMessage } = useErrorContext()
 
     const [editable, setEditable] = useState(false)
     const [contentToBeEdited, setContentToBeEdited] = useState(content)
 
     const isUseOwnComment = user?.username === comment.username
+    const { editCommentMessage } = TextMessages
 
     const handleDeleteComment = async () => {
 
-        if (!accessToken) return
         try {
-            const res = await deleteComment(postId, accessToken, comment.commentId)
+            const res = await deleteComment(postId, comment.commentId)
             setCurrComments(comments => comments.filter(item => item.commentId !== comment.commentId))
             setSuccessMessage('Message deleted')
         } catch (err: any) {
@@ -44,11 +45,13 @@ export default function UserComment({ comment, setCurrComments, currComments, po
     }
 
     const handleSaveComment = async () => {
-
-        if (!accessToken) return
-
         try {
-            const response = await editComment(postId, accessToken, { content: contentToBeEdited, commentId: comment.commentId })
+            const commentHasChanged = contentToBeEdited !== comment.content
+            if (!commentHasChanged) {
+                setErrorMessage(editCommentMessage.validateCommentChange)
+                return
+            }
+            const response = await editComment(postId, { content: contentToBeEdited, commentId: comment.commentId })
             const otherComments = currComments.filter(comment => comment.commentId !== commentId)
             const editedComment = { ...comment, content: contentToBeEdited }
 
@@ -83,7 +86,7 @@ export default function UserComment({ comment, setCurrComments, currComments, po
                         </div>
 
                     </div> :
-                    <div>
+                    <div style={{ maxWidth: '80%' }}>
                         <div className={styles.user}> {username}</div>
                         <div className={styles.text}> {content}</div>
                     </div>}

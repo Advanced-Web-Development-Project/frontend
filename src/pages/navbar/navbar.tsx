@@ -10,6 +10,7 @@ import { useAuth } from '../../contexts/AuthContexts';
 import { useDialogContext } from '../../contexts/PageContext';
 import { DialogPage } from '../../models/general';
 import { useSearchTermContext } from '../../contexts/SearchTermContext';
+import Cookies from 'js-cookie';
 
 const Navbar: React.FC = () => {
 

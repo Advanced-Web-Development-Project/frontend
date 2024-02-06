@@ -1,9 +1,11 @@
 import { Button } from '@mui/material'
 import no_image from "./../../pictures/no_image.jpg"
-import { deleteUserAPI } from '../../api/user_api'
-import { User } from '../../models/general'
+import { deleteUserAPI, deleteUserImageAPI, updateUserAPI } from '../../api/user_api'
+import { HttpErrorResponse, User } from '../../models/general'
 import { useAuth } from '../../contexts/AuthContexts'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { useErrorContext } from '../../contexts/ErrorContext'
 
 interface ProfileImage {
     imagePath: string,
@@ -12,30 +14,30 @@ interface ProfileImage {
 
 function ProfileImage({ setScreenEditable, imagePath }: ProfileImage) {
 
-    const { accessToken, user, logout } = useAuth()
+    const { user, logout } = useAuth()
+    const { setSuccessMessage, setErrorMessage } = useErrorContext()
 
     const navigate = useNavigate();
+    // const [] = useState()
 
-    if (!user || !accessToken) return <></>
-
-    console.log(user.avatar, "avatar ")
+    if (!user) return <></>
 
     const handleEditClick = () => {
         setScreenEditable(screen => !screen)
     }
 
-    const handleDleteClick = async () => {
+    const handleDleteImageClick = async () => {
         try {
-            const res = await deleteUserAPI(user.id, accessToken)
-            logout();
-            navigate(-1)
-        } catch (error) {
-            console.log(error)
+            const res = await deleteUserImageAPI()
+            setSuccessMessage('Image deleted :)')
+        } catch (err: any) {
+            const error: HttpErrorResponse = err
+            setErrorMessage(error.response.data.errors[0])
         }
 
     }
 
-    const computedImagePath = `http://localhost:8000/${user.avatar}`
+    const computedImagePath = `${process.env.REACT_APP_SERVER_URL_DEV}/${user.avatar}`
 
     return (
 
@@ -47,7 +49,7 @@ function ProfileImage({ setScreenEditable, imagePath }: ProfileImage) {
             />
             <div style={{ marginTop: 10, display: 'flex', gap: 10, justifyContent: "center" }}>
                 <Button variant='contained' color='primary' size='small' style={{ marginLeft: 10 }} onClick={handleEditClick}>Edit</Button>
-                <Button variant='contained' color='error' size='small' style={{ marginLeft: 10 }} onClick={handleDleteClick}>Remove</Button>
+                <Button variant='contained' color='error' size='small' style={{ marginLeft: 10 }} onClick={handleDleteImageClick}>Remove</Button>
             </div>
         </div>
     )

@@ -11,7 +11,7 @@ interface InputFieldProps {
     errorMessage: string | undefined,
     description: string,
     accept?: string,
-    type: 'text' | 'file'
+    type: 'text' | 'file' | 'password'
 
 }
 

@@ -1,9 +1,9 @@
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react'
-import { ProfileFileds, getUpdatedFieldFromUser, initialProfileFields, profileOutput } from './service';
+import { ProfileFileds, getProfileOutput, getUpdatedFieldFromUser, initialProfileFields } from './service';
 import { userUpdateSchema } from '../../validation';
 import { useAuth } from '../../contexts/AuthContexts';
-import { User } from '../../models/general';
+import { HttpErrorResponse, User } from '../../models/general';
 import { updateUserAPI } from '../../api/user_api';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
@@ -12,15 +12,16 @@ import { useErrorContext } from '../../contexts/ErrorContext';
 import { TextMessages } from '../../contants/message_error';
 
 interface ProfileFormProps {
-    screenEditable: boolean
+    screenEditable: boolean,
+    setScreenEditable: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function ProfileForm({ screenEditable }: ProfileFormProps) {
+function ProfileForm({ screenEditable, setScreenEditable }: ProfileFormProps) {
 
     const [oldProfileFields, setOldProfileFields] = useState<ProfileFileds>(initialProfileFields)
     const [imageFile, setImageFile] = useState<File | null>(null)
 
-    const { accessToken, user, setUser } = useAuth()
+    const { user, setUser } = useAuth()
     const { setSuccessMessage, setErrorMessage } = useErrorContext()
     const { updateUserMessage } = TextMessages
 
@@ -29,7 +30,7 @@ function ProfileForm({ screenEditable }: ProfileFormProps) {
         if (!user) return
 
         const { email, name, username } = user
-        setOldProfileFields({ email, name, username, avatar: null })
+        setOldProfileFields({ email, name, username, avatar: null, password: "" })
     }, [])
 
     const { values, handleBlur, handleChange, handleSubmit, errors, touched, setFieldValue } = useFormik<ProfileFileds>({
@@ -40,26 +41,26 @@ function ProfileForm({ screenEditable }: ProfileFormProps) {
 
             const updatedUser = getUpdatedFieldFromUser(oldProfileFields, values, imageFile);
 
-            if (!accessToken) return
             if (Object.keys(updatedUser).length === 0) {
                 setErrorMessage('You forgot to update... :)')
                 return
             }
 
             try {
-                const user: User = await updateUserAPI(oldProfileFields.username, accessToken, updatedUser)
+                const user: User = await updateUserAPI(oldProfileFields.username, updatedUser)
                 setUser(user)
                 setSuccessMessage(updateUserMessage.success)
+                setScreenEditable(false)
 
-            } catch (error: any) {
-                setErrorMessage(updateUserMessage.error)
+            } catch (err: any) {
+                const error: HttpErrorResponse = err
+                setErrorMessage(error.response.data.errors[0])
             }
         },
     })
 
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-
         const files = event.target.files;
         if (files && files.length > 0) {
             const file = files[0];
@@ -67,12 +68,14 @@ function ProfileForm({ screenEditable }: ProfileFormProps) {
         }
     };
 
+    const profileFormFields = getProfileOutput(user!.provider)
+
     return (
         <form onSubmit={handleSubmit}>
 
             <div style={{ marginTop: 60, paddingBottom: 20, display: 'flex', flexDirection: 'column' }}>
 
-                {profileOutput.map(({ key, type, desc, accept }) => {
+                {profileFormFields.map(({ key, type, desc, accept }) => {
 
                     return (
                         <TextInputField
@@ -85,7 +88,7 @@ function ProfileForm({ screenEditable }: ProfileFormProps) {
                             isErrored={(errors[key] !== undefined && touched[key] !== undefined)}
                             errorMessage={errors[key] as string | undefined}
                             onBlur={handleBlur}
-                            onChange={type === 'text' ? handleChange : handleFileChange}
+                            onChange={type === 'text' || type === 'password' ? handleChange : handleFileChange}
                         />
                     )
                 })}
