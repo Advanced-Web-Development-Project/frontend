@@ -6,6 +6,8 @@ import { deleteUserAPI } from '../../api/user_api'
 import { useAuth } from '../../contexts/AuthContexts'
 import { useNavigate } from 'react-router-dom'
 import ConfirmationDialog from '../specific_post/delete_post_alert'
+import { useDialogContext } from '../../contexts/PageContext'
+import { DialogPage } from '../../models/general'
 
 interface ProfileHeaderProps {
     name: string,
@@ -14,6 +16,7 @@ interface ProfileHeaderProps {
 function ProfileHeader({ email, name }: ProfileHeaderProps) {
 
     const { user, logout } = useAuth()
+    const { page, setPage } = useDialogContext()
     const navigate = useNavigate()
 
     if (!user) return <></>
@@ -22,9 +25,8 @@ function ProfileHeader({ email, name }: ProfileHeaderProps) {
         try {
             const res = await deleteUserAPI(user.id)
             logout();
-            navigate(-1)
+            setPage(DialogPage.None)
         } catch (error) {
-            console.log(error)
         }
 
     }

@@ -47,8 +47,6 @@ server.interceptors.response.use(
                 originalRequest.headers.Authorization = `Bearer ${accessToken}`;
                 return axios(originalRequest);
             } catch (error) {
-                // Handle refresh token error or redirect to login
-                console.log(error)
             }
         }
 

@@ -38,7 +38,6 @@ function Home() {
             setLoading(false)
         } catch (err) {
             setLoading(false)
-            console.log(err)
         }
     }
 
@@ -52,7 +51,6 @@ function Home() {
             setLoading(true)
             fetchData();
         } catch (error) {
-            console.log(error)
         }
     }, [])
 

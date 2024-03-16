@@ -76,7 +76,6 @@ function PostLikeBox({ post, style, setPost }: PostLikeBoxProps) {
                 } as Post
             })
         } catch (err) {
-            console.log(err)
         }
     }
 

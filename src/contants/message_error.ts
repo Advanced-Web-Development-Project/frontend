@@ -3,7 +3,7 @@ type GlobalTextMessage = {}
 export const TextMessages = {
     updateUserMessage: {
         error: 'Error while updating user...',
-        success: 'User deatils updaed successfully'
+        success: 'User details updated successfully'
     },
     createPostMessage: {
         error: 'Error while creating post...',

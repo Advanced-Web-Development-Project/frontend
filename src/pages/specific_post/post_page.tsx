@@ -76,7 +76,7 @@ function PostPage({ }: PostPageProps) {
       setShowComments(true);
       setText("")
     } catch (error) {
-      console.log(error);
+
     }
   };
 

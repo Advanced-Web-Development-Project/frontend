@@ -16,7 +16,6 @@ const useFetchPosts = () => {
                 setPosts(postsData);
                 setOriginalPosts(postsData);
             } catch (error) {
-                console.log(error);
             } finally {
                 setLoading(false);
             }
