@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { ProfileFileds, getProfileOutput, getUpdatedFieldFromUser, initialProfileFields } from './service';
 import { userUpdateSchema } from '../../validation';
 import { useAuth } from '../../contexts/AuthContexts';
-import { HttpErrorResponse, User } from '../../models/general';
+import { DialogPage, HttpErrorResponse, User } from '../../models/general';
 import { updateUserAPI } from '../../api/user_api';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import TextInputField from '../../gen_components/TextInputField';
 import { useErrorContext } from '../../contexts/ErrorContext';
 import { TextMessages } from '../../contants/message_error';
+import { useDialogContext } from '../../contexts/PageContext';
 
 interface ProfileFormProps {
     screenEditable: boolean,
@@ -24,6 +25,7 @@ function ProfileForm({ screenEditable, setScreenEditable }: ProfileFormProps) {
     const { user, setUser } = useAuth()
     const { setSuccessMessage, setErrorMessage } = useErrorContext()
     const { updateUserMessage } = TextMessages
+    const { setPage } = useDialogContext()
 
     useEffect(() => {
 
@@ -37,9 +39,10 @@ function ProfileForm({ screenEditable, setScreenEditable }: ProfileFormProps) {
         initialValues: oldProfileFields,
         validationSchema: userUpdateSchema,
         enableReinitialize: true,
-        onSubmit: async (user: Partial<ProfileFileds>) => {
+        onSubmit: async (fields: Partial<ProfileFileds>) => {
 
             debugger;
+
             const updatedUser = getUpdatedFieldFromUser(oldProfileFields, values, imageFile);
 
             if (Object.keys(updatedUser).length === 0) {
@@ -48,10 +51,12 @@ function ProfileForm({ screenEditable, setScreenEditable }: ProfileFormProps) {
             }
 
             try {
-                const user: User = await updateUserAPI(oldProfileFields.username, updatedUser)
-                setUser(user)
+                const newUser: User = await updateUserAPI(user!.username, updatedUser)
+                // const user: User = await updateUserAPI(oldProfileFields.username, updatedUser)
+                setUser(newUser)
                 setSuccessMessage(updateUserMessage.success)
                 setScreenEditable(false)
+                setPage(DialogPage.None)
 
             } catch (err: any) {
                 const error: HttpErrorResponse = err

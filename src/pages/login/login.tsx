@@ -47,12 +47,10 @@ function Login({ }: LoginProps) {
 
     const handleLogin = async () => {
         try {
-            debugger;
             const response = await loginAPI(email, password);
             handleUserHasLoggedIn(response)
 
         } catch (err: any) {
-            debugger;
             const error: HttpErrorResponse = err
             setErrorMessage(error.response.data.errors[0])
         }
