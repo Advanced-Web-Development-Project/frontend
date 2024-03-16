@@ -28,7 +28,11 @@ export const dislikePostAPI = async (postId: string) => {
 
 export const createPostAPI = async (post: PostOnScreen): Promise<Post> => {
 
-    const response = await server.post(`/posts/`, post)
+    const response = await server.post(`/posts/`, post, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+    })
     const postResult: Post = response.data.data
     return postResult
 }

@@ -41,6 +41,8 @@ function PostPage({ }: PostPageProps) {
 
   if (!specifcPost) return <></>;
 
+  debugger;
+
   const {
     title,
     createdAt,

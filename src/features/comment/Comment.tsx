@@ -57,6 +57,7 @@ export default function UserComment({ comment, setCurrComments, currComments, po
 
             setCurrComments([...otherComments, editedComment])
             setSuccessMessage(response.message)
+            setEditable(false)
 
         } catch (err: any) {
             const error: HttpErrorResponse = err

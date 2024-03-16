@@ -34,6 +34,9 @@ server.interceptors.response.use(
 
             try {
                 const refreshToken = Cookies.get('refreshToken');
+
+                if (!refreshToken) throw 'err'
+
                 const response = await server.post('/auth/refresh-token', { refreshToken });
                 const { accessToken, refreshToken: newRefreshToken } = response.data.data;
 

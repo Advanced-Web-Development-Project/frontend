@@ -58,7 +58,7 @@ function Home() {
 
     return (
         <>
-            <DialogConatiner setPosts={setPosts}> </DialogConatiner>
+            <DialogConatiner setPosts={setOriginalPosts}> </DialogConatiner>
 
             <div className={styles.page_container}>
                 {

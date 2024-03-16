@@ -8,14 +8,15 @@ import { useState } from 'react'
 import { useErrorContext } from '../../contexts/ErrorContext'
 
 interface ProfileImage {
-    imagePath: string,
     setScreenEditable: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function ProfileImage({ setScreenEditable, imagePath }: ProfileImage) {
+function ProfileImage({ setScreenEditable }: ProfileImage) {
 
-    const { user, logout } = useAuth()
+    const { user, setUser } = useAuth()
     const { setSuccessMessage, setErrorMessage } = useErrorContext()
+
+    // const { imagePath, setImagePath } = useState()
 
     const navigate = useNavigate();
     // const [] = useState()
@@ -28,7 +29,8 @@ function ProfileImage({ setScreenEditable, imagePath }: ProfileImage) {
 
     const handleDleteImageClick = async () => {
         try {
-            const res = await deleteUserImageAPI()
+            const user = await deleteUserImageAPI()
+            setUser(user)
             setSuccessMessage('Image deleted :)')
         } catch (err: any) {
             const error: HttpErrorResponse = err

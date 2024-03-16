@@ -33,6 +33,7 @@ function AddPost({ setPosts: setPostsList }: AddPostProps) {
 
     const handleUploadImage = (event: any) => {
         const file = event.target.files[0]
+        // handlePostChange('image', file)
         handlePostChange('image', file)
     }
 

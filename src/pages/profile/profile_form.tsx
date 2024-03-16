@@ -39,6 +39,7 @@ function ProfileForm({ screenEditable, setScreenEditable }: ProfileFormProps) {
         enableReinitialize: true,
         onSubmit: async (user: Partial<ProfileFileds>) => {
 
+            debugger;
             const updatedUser = getUpdatedFieldFromUser(oldProfileFields, values, imageFile);
 
             if (Object.keys(updatedUser).length === 0) {

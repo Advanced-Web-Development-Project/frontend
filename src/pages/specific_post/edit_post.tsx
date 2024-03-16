@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material'
+import { Button, IconButton, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { createPostAPI, editPostAPI } from '../../api/post_api'
 import { useErrorContext } from '../../contexts/ErrorContext'
@@ -49,7 +49,7 @@ function EditPost({ handleClose }: EditPostProps) {
         try {
 
             const newPost = await editPostAPI(specifcPost!.postId, postEditOS)
-            setSpecificPost(newPost)
+            setSpecificPost({ ...newPost, username: specifcPost!.username })
             setSuccessMessage(editPostMessage.success)
             setTimeout(() => setPage(DialogPage.SpecificPost), 1500)
             handleClose();
@@ -58,9 +58,19 @@ function EditPost({ handleClose }: EditPostProps) {
             setErrorMessage(editPostMessage.success)
         }
     }
+
+    const closePage = () => {
+        handleClose();
+    }
     return (
         <>
-            <div style={{ display: 'flex', flexDirection: 'column', padding: 50, gap: 20, width: 400 }}>
+
+            <div style={{ display: 'flex', justifyContent: "end", paddingTop: 15, paddingRight: 15 }}>
+                <IconButton onClick={closePage} size='small'>
+                    X
+                </IconButton>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', padding: 35, paddingTop: 0, gap: 20, width: 400 }}>
                 <h1>Edit a post</h1>
                 <TextField
                     onChange={(e) => handlePostOSChange('title', e.target.value)}

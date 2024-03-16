@@ -25,5 +25,5 @@ export const getUserInfoAPI = async () => {
 
 export const deleteUserImageAPI = async (): Promise<User> => {
     const response = await server.delete(`/users/avatar`);
-    return response.data
+    return response.data.data
 }
