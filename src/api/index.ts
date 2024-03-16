@@ -13,7 +13,6 @@ export const server = axios.create({
 server.interceptors.request.use(
     (config) => {
         const token = Cookies.get('accessToken');
-        console.log("TOKEN: ", token)
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

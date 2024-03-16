@@ -103,7 +103,7 @@ function Login({ }: LoginProps) {
 
                     </div>
 
-                    <div>
+                    <div onClick={() => setPage(DialogPage.Signup)}>
                         <span>New to Reddit? </span>
                         <Link href="#" underline="none">Sign Up</Link>
                     </div>

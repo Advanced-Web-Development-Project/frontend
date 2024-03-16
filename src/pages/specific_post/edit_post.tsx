@@ -39,8 +39,6 @@ function EditPost({ handleClose }: EditPostProps) {
         return ""
     }
 
-    console.log("POST: ", specifcPost)
-
     const handlePostSubmit = async () => {
         const errorMessage = validatePost(postEditOS)
         if (errorMessage) {
@@ -51,7 +49,6 @@ function EditPost({ handleClose }: EditPostProps) {
         try {
 
             const newPost = await editPostAPI(specifcPost!.postId, postEditOS)
-            console.log(newPost)
             setSpecificPost(newPost)
             setSuccessMessage(editPostMessage.success)
             setTimeout(() => setPage(DialogPage.SpecificPost), 1500)

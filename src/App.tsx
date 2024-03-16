@@ -19,7 +19,6 @@ function App() {
       const loggedUser = await getUserInfoAPI()
       login(loggedUser.data)
     } catch (err) {
-      console.log(err)
     }
   };
 

@@ -32,8 +32,6 @@ function Profile() {
 
     const { avatar, name, email } = user
 
-    console.log(user)
-
     return (
         <div className={styles.card}>
 

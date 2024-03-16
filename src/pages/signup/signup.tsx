@@ -67,7 +67,7 @@ function SignUp() {
                         })}
                     </div>
 
-                    <div>
+                    <div onClick={() => setPage(DialogPage.Login)}>
                         <span>Already a redditor  </span>
                         <Link href="#" underline="none">Log In</Link>
                     </div>
