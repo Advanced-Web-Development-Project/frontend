@@ -6,6 +6,10 @@
     /* padding: 5px; */
 }
 
+.card:hover {
+    background-color: rgba(245, 244, 244, 0.925);
+}
+
 .card__picture {
     width: 100px;
     height: 70px;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styles from './index.module.css'
 import IconWithTextButton from '../../gen_components/IconWithTextButton.tsx/IconWithTextButton'
-import { Fireplace, NewReleases, RefreshOutlined } from '@mui/icons-material/';
+import { PostAdd, FileOpen, MilitaryTech, BookRounded, SportsBaseball, ScienceRounded, Rocket, RefreshOutlined } from '@mui/icons-material/';
 import { HttpErrorResponse, Post, PostCategory } from '../../models/general';
 import { getAllPostsByCategoryAPI, refreshAllPostsByCategoryAPI } from '../../api/post_api';
 import { useErrorContext } from '../../contexts/ErrorContext';
@@ -66,19 +66,19 @@ function SearchBar({ setPosts, posts, originalPosts, setOriginalPosts }: SearchB
             <div className={styles.main__left}>
 
                 <IconWithTextButton onClick={() => getPostsByCategory(PostCategory.MyPosts)} text='All Posts'>
-                    <Fireplace color={selectedCategory === PostCategory.MyPosts ? 'warning' : undefined}></Fireplace>
+                    <BookRounded color={selectedCategory === PostCategory.MyPosts ? 'warning' : undefined}></BookRounded>
                 </IconWithTextButton>
                 {user && <IconWithTextButton onClick={() => handleUserPostsOnly(PostCategory.AllPosts)} text='My Posts'>
-                    <Fireplace color={selectedCategory === PostCategory.AllPosts ? 'warning' : undefined}></Fireplace>
+                    <FileOpen color={selectedCategory === PostCategory.AllPosts ? 'warning' : undefined}></FileOpen>
                 </IconWithTextButton>}
                 <IconWithTextButton onClick={() => getPostsByCategory(PostCategory.Tech)} text='Technology'>
-                    <Fireplace color={selectedCategory === PostCategory.Tech ? 'warning' : undefined}></Fireplace>
+                    <Rocket color={selectedCategory === PostCategory.Tech ? 'warning' : undefined}></Rocket>
                 </IconWithTextButton>
                 <IconWithTextButton onClick={() => getPostsByCategory(PostCategory.Sport)} text='Sports'>
-                    <NewReleases color={selectedCategory === PostCategory.Sport ? 'warning' : undefined}></NewReleases>
+                    <SportsBaseball color={selectedCategory === PostCategory.Sport ? 'warning' : undefined}></SportsBaseball>
                 </IconWithTextButton>
                 <IconWithTextButton onClick={() => getPostsByCategory(PostCategory.Science)} text='Science'>
-                    <Fireplace color={selectedCategory === PostCategory.Science ? 'warning' : undefined}></Fireplace>
+                    <ScienceRounded color={selectedCategory === PostCategory.Science ? 'warning' : undefined}></ScienceRounded>
                 </IconWithTextButton>
 
             </div>
